@@ -48,8 +48,8 @@
     "sass": "^1.54.9"
   },
   "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
+    "node": "22.x",
+    "npm": "10.x"
   },
   "overrides": {
     "postcss": ">=8.4.31"
