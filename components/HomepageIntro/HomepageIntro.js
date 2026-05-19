@@ -28,7 +28,7 @@ export default function HomepageIntro() {
               commitment to these principles is what sets us apart.
             </p>
             <p>
-              At Cal Poly Partners, we don&apos;t just provide services&semi; we forge partnerships
+              At Cal Poly Partners, we don't just provide services; we forge partnerships
               that shape the future. Join us in building a brighter tomorrow for Cal Poly
               and its community. Together, we can accomplish more than we ever imagined.
             </p>
