@@ -13,6 +13,7 @@ export default function HomepageEmpowering() {
                 width={980}
                 height={630}
                 alt="Young professional woman standing and smiling in an office cubicle workspace environment."
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ width: '100%', height: 'auto' }}
               />
             </figure>

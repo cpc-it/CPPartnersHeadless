@@ -141,17 +141,7 @@ export default function Component(props) {
 
 
 
-{/* 
 
-              {featuredImage?.node?.sourceUrl && (
-                <Image
-                  src={featuredImage?.node?.sourceUrl}
-                  width={1200}
-                  height={675}
-                  alt={featuredImage?.node?.altText || title}
-                  layout="responsive"
-                />
-              )} */}
 
               {featuredImage?.node?.sourceUrl && (
                 <figure
@@ -164,7 +154,8 @@ export default function Component(props) {
                     width={1200}
                     height={675}
                     alt={featuredImage.node.altText || title}
-                    layout="responsive"
+                    sizes="(max-width: 900px) 100vw, 840px"
+                    style={{ width: '100%', height: 'auto' }}
                   />
                   {featuredImage?.node?.caption && (
                     <figcaption
