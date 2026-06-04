@@ -24,41 +24,9 @@ export default function SEO({
     return null;
   }
 
-  const typekitStylesheets = [
-    'https://use.typekit.net/umi1lem.css',
-    'https://use.typekit.net/mfv5sni.css',
-    'https://use.typekit.net/qnm1phw.css',
-    'https://use.typekit.net/ato6pec.css',
-  ];
-
   return (
     <>
       <Head>
-        <link rel="preconnect" href="https://use.typekit.net" />
-        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
-
-        {typekitStylesheets.map((href) => (
-          <link key={`${href}-preload`} rel="preload" as="style" href={href} />
-        ))}
-        {typekitStylesheets.map((href) => (
-          <link
-            key={`${href}-stylesheet`}
-            rel="stylesheet"
-            href={href}
-            media="print"
-            onLoad={(event) => {
-              event.currentTarget.media = 'all';
-            }}
-          />
-        ))}
-        <noscript>
-          {typekitStylesheets.map((href) => (
-            <link key={`${href}-noscript`} rel="stylesheet" href={href} />
-          ))}
-        </noscript>
-        {/* <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/> */}
-
-
         <meta property="og:type" content="website" />
         <meta property="twitter:card" content="summary_large_image" />
 
