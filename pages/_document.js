@@ -1,10 +1,8 @@
 import { Head, Html, Main, NextScript } from 'next/document';
 
 const typekitStylesheets = [
-  'https://use.typekit.net/umi1lem.css',
+  // Keep a single Typekit kit for Utopia/Abolition families used in the UI.
   'https://use.typekit.net/mfv5sni.css',
-  'https://use.typekit.net/qnm1phw.css',
-  'https://use.typekit.net/ato6pec.css',
 ];
 
 export default function Document() {
