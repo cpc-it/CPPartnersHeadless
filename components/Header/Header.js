@@ -191,6 +191,7 @@ export default function Header({ className, menuItems }) {
                   width={400}
                   height={80}
                   alt="Cal Poly University logo"
+                  sizes="(max-width: 768px) 180px, 200px"
                   style={{ width: '100%', height: 'auto' }}
                 />
               </a>

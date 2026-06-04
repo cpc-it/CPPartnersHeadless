@@ -44,6 +44,7 @@ export default function HomepageIntro() {
             height={160}
             alt="Green circular text logo reading 85 years of partnership"
             className={styles.image}
+            sizes="160px"
             style={{ width: '100%', height: 'auto' }}
           />
 

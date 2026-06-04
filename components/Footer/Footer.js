@@ -140,6 +140,7 @@ export default function Footer({
                   width={400}
                   height={80}
                   alt="Cal Poly University logo"
+                  sizes="(max-width: 768px) 180px, 250px"
                   style={{ width: '100%', height: 'auto' }}
                 />
               </a>
