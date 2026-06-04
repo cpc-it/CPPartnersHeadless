@@ -26,6 +26,16 @@ export default function Footer({
   navOneMenuItems, // SECONDARY footer menu
   navTwoMenuItems, // TERTIARY footer menu
 }) {
+  const socialLabels = {
+    facebook: 'Cal Poly Partners on Facebook',
+    instagram: 'Cal Poly Partners on Instagram',
+    linkedin: 'Cal Poly Partners on LinkedIn',
+    twitter: 'Cal Poly Partners on X',
+    calPolyFacebook: 'Cal Poly on Facebook',
+    calPolyInstagram: 'Cal Poly on Instagram',
+    calPolyTwitter: 'Cal Poly on X',
+  };
+
   return (
     <footer className={cx('footer')}>
       <div className="container">
@@ -53,9 +63,14 @@ export default function Footer({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cx('social-icon-link')}
+                        aria-label={socialLabels.facebook}
                         href={appConfig.socialLinks.facebookUrl}
                       >
-                        <FaFacebookF className={cx('social-icon')} />
+                        <FaFacebookF
+                          className={cx('social-icon')}
+                          aria-hidden="true"
+                          focusable="false"
+                        />
                       </a>
                     </li>
                   )}
@@ -65,9 +80,14 @@ export default function Footer({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cx('social-icon-link')}
+                        aria-label={socialLabels.instagram}
                         href={appConfig.socialLinks.instagramUrl}
                       >
-                        <FaInstagram className={cx('social-icon')} />
+                        <FaInstagram
+                          className={cx('social-icon')}
+                          aria-hidden="true"
+                          focusable="false"
+                        />
                       </a>
                     </li>
                   )}
@@ -77,9 +97,14 @@ export default function Footer({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cx('social-icon-link')}
+                        aria-label={socialLabels.linkedin}
                         href={appConfig.socialLinks.linkedinUrl}
                       >
-                        <FaLinkedinIn className={cx('social-icon')} />
+                        <FaLinkedinIn
+                          className={cx('social-icon')}
+                          aria-hidden="true"
+                          focusable="false"
+                        />
                       </a>
                     </li>
                   )}
@@ -89,9 +114,14 @@ export default function Footer({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cx('social-icon-link')}
+                        aria-label={socialLabels.twitter}
                         href={appConfig.socialLinks.twitterUrl}
                       >
-                        <FaXTwitter className={cx('social-icon')} />
+                        <FaXTwitter
+                          className={cx('social-icon')}
+                          aria-hidden="true"
+                          focusable="false"
+                        />
                       </a>
                     </li>
                   )}
@@ -129,9 +159,14 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cx('social-icon-link')}
+                  aria-label={socialLabels.calPolyFacebook}
                   href="https://www.facebook.com/CalPoly/"
                 >
-                  <FaFacebookF className={cx('social-icon')} />
+                  <FaFacebookF
+                    className={cx('social-icon')}
+                    aria-hidden="true"
+                    focusable="false"
+                  />
                 </a>
               </li>
               <li>
@@ -139,9 +174,14 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cx('social-icon-link')}
+                  aria-label={socialLabels.calPolyInstagram}
                   href="https://www.instagram.com/calpoly/"
                 >
-                  <FaInstagram className={cx('social-icon')} />
+                  <FaInstagram
+                    className={cx('social-icon')}
+                    aria-hidden="true"
+                    focusable="false"
+                  />
                 </a>
               </li>
               <li>
@@ -149,9 +189,14 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cx('social-icon-link')}
+                  aria-label={socialLabels.calPolyTwitter}
                   href="https://x.com/CalPoly"
                 >
-                  <FaXTwitter className={cx('social-icon')} />
+                  <FaXTwitter
+                    className={cx('social-icon')}
+                    aria-hidden="true"
+                    focusable="false"
+                  />
                 </a>
               </li>
             </ul>

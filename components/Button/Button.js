@@ -39,7 +39,7 @@ export default function Button({
   if (href) {
     return (
       <Link legacyBehavior href={href}>
-        <a role="button" href={href} className={buttonClassName} {...props}>
+        <a href={href} className={buttonClassName} {...props}>
           {children}
         </a>
       </Link>

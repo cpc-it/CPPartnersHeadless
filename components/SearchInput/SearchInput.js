@@ -22,7 +22,7 @@ export default function SearchInput({ value, onChange, ...props }) {
 
   return (
     <div className={styles.wrapper}>
-      <FaSearch className={styles.icon} />
+      <FaSearch className={styles.icon} aria-hidden="true" focusable="false" />
       <label className="sr-only" htmlFor="search">
         Search
       </label>

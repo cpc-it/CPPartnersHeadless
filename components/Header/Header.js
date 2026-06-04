@@ -214,7 +214,7 @@ export default function Header({ className, menuItems }) {
                 aria-label="Search the site"
                 onClick={closeNavigation}
               >
-                <FaSearch title="Search" role="img" />
+                <FaSearch aria-hidden="true" focusable="false" />
               </a>
             </Link>
 

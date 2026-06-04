@@ -45,7 +45,11 @@ function Posts({ posts, intro, id }) {
             >
               <div className={cx('card')}>
                 <Link legacyBehavior href={post?.uri ?? '#'}>
-                  <a className={cx('image-holder')} tabIndex="-1">
+                  <a
+                    className={cx('image-holder')}
+                    tabIndex="-1"
+                    aria-label={post.title}
+                  >
                     <FeaturedImage
                       className={cx('image')}
                       image={image}

@@ -99,7 +99,11 @@ export default function SearchResults({
   if (!isLoading && !searchResults?.length) {
     return (
       <div className={styles['no-results']}>
-        <FaSearch className={styles['no-results-icon']} />
+        <FaSearch
+          className={styles['no-results-icon']}
+          aria-hidden="true"
+          focusable="false"
+        />
         <div className={styles['no-results-text']}>No results</div>
       </div>
     );
