@@ -110,7 +110,7 @@ export default function Footer({
                   width={400}
                   height={80}
                   alt="Cal Poly University logo"
-                  layout="responsive"
+                  style={{ width: '100%', height: 'auto' }}
                 />
               </a>
             </Link>

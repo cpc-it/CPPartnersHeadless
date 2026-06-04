@@ -13,7 +13,7 @@ export default function HomepageEmpowering() {
                 width={980}
                 height={630}
                 alt="Young professional woman standing and smiling in an office cubicle workspace environment."
-                layout="responsive"
+                style={{ width: '100%', height: 'auto' }}
               />
             </figure>
             <div className="wp-block-media-text__content">

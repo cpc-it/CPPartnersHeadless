@@ -26,7 +26,7 @@ export default function HomepageFoodInsecurity() {
                 width={980}
                 height={630}
                 alt="Group of GleanSLO volunteers standing in a citrus orchard behind bins filled with freshly harvested oranges, smiling and holding a banner for the food rescue program."
-                layout="responsive"
+                style={{ width: '100%', height: 'auto' }}
               />
             </figure>
           </div>

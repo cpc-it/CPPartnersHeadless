@@ -43,8 +43,8 @@ export default function HomepageIntro() {
             width={160}
             height={160}
             alt="Green circular text logo reading 85 years of partnership"
-            layout="responsive"
             className={styles.image}
+            style={{ width: '100%', height: 'auto' }}
           />
 
           </div>
