@@ -54,12 +54,16 @@ export default function Header({ className, menuItems }) {
     });
   };
 
-  const toggleExpandedItem = (itemId) => {
-    setExpandedItems((current) =>
-      current.includes(itemId)
-        ? current.filter((id) => id !== itemId)
-        : [...current, itemId]
-    );
+  const toggleExpandedItem = (itemId, descendantIds = []) => {
+    setExpandedItems((current) => {
+      if (current.includes(itemId)) {
+        const idsToClear = new Set([itemId, ...descendantIds]);
+
+        return current.filter((id) => !idsToClear.has(id));
+      }
+
+      return [...current, itemId];
+    });
   };
 
   const handleDesktopHoverStart = (itemId) => {

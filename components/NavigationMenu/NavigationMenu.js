@@ -23,6 +23,21 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     return null;
   }
 
+  const getDescendantIds = (item) => {
+    const ids = [];
+
+    const walk = (currentItem) => {
+      currentItem.children?.forEach((child) => {
+        ids.push(child.id);
+        walk(child);
+      });
+    };
+
+    walk(item);
+
+    return ids;
+  };
+
   // Convert flat list to tree structure
   const buildMenuTree = (items) => {
     const map = {};
@@ -53,6 +68,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       const target = item.target || undefined;
       const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
       const isExternalLink = /^(https?:|mailto:|tel:|\/\/)/i.test(href);
+      const descendantIds = hasChildren ? getDescendantIds(item) : [];
 
       return (
         <li
@@ -90,7 +106,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
                 aria-expanded={isExpanded}
                 aria-controls={submenuId}
                 aria-label={`Toggle ${item.label ?? 'submenu'} submenu`}
-                onClick={() => onToggleItem?.(item.id)}
+                onClick={() => onToggleItem?.(item.id, descendantIds)}
               >
                 <FaChevronDown aria-hidden="true" />
               </button>
