@@ -38,12 +38,16 @@ export default function Header({ className, menuItems }) {
     setHoveredDesktopItemId(null);
   };
 
-  const toggleNavigation = () => {
+  const toggleNavigation = (event) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+
     setIsNavShown((current) => {
       const next = !current;
 
       if (!next) {
         setExpandedItems([]);
+        setHoveredDesktopItemId(null);
       }
 
       return next;

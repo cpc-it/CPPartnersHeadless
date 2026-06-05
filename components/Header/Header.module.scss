@@ -87,6 +87,8 @@ $nav-collapse-breakpoint: 1212px;
   align-items: center;
   gap: 0.75rem;
   margin-left: auto;
+  position: relative;
+  z-index: 10000002;
 
   @media (min-width: $nav-collapse-breakpoint) {
     order: 3;
@@ -101,10 +103,13 @@ $nav-collapse-breakpoint: 1212px;
   justify-content: center;
   width: 44px;
   height: 44px;
+  flex: 0 0 44px;
   border-radius: 999px;
   border: 1px solid rgba(21, 71, 52, 0.14);
   color: var(--color-primary);
   background: rgba(255, 255, 255, 0.72);
+  position: relative;
+  z-index: 1;
   transition: transform 0.2s ease, background-color 0.2s ease,
     border-color 0.2s ease;
 
@@ -114,20 +119,29 @@ $nav-collapse-breakpoint: 1212px;
     border-color: rgba(21, 71, 52, 0.24);
     background: #fff;
   }
+
+  @media (max-width: 1211px) {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+  }
 }
 
 .nav-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
+  margin: 0 0 0 1rem;
   width: 44px;
   height: 44px;
+  flex: 0 0 44px;
   padding: 0;
   border: 1px solid rgba(21, 71, 52, 0.14);
-  border-radius: 999px;
+  border-radius: 12px;
   background: #fff;
   color: var(--color-primary);
+  position: relative;
+  z-index: 2;
   line-height: 1;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 
@@ -142,14 +156,22 @@ $nav-collapse-breakpoint: 1212px;
     font-size: 2rem;
   }
 
+  @media (max-width: 1211px) {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+  }
+
   @media (min-width: $nav-collapse-breakpoint) {
     display: none;
+    margin-left: 0;
   }
 }
 
 .nav-backdrop {
   position: fixed;
   inset: 0;
+  z-index: 9999998;
   border: 0;
   padding: 0;
   background: rgba(15, 23, 42, 0.28);
@@ -171,7 +193,7 @@ $nav-collapse-breakpoint: 1212px;
   position: fixed;
   top: 1.4rem;
   right: 1.4rem;
-  z-index: 10000001;
+  z-index: 10000002;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -210,6 +232,7 @@ $nav-collapse-breakpoint: 1212px;
     visibility: hidden;
     transition: transform 0.28s ease, opacity 0.28s ease, visibility 0.28s ease;
     overflow-y: auto;
+    z-index: 10000000;
   }
 
   &.show {
