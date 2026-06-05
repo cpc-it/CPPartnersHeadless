@@ -1,0 +1,15 @@
+{
+  "route": "/",
+  "failOnWarnings": false,
+  "warningAllowlist": [
+    {
+      "type": "substring",
+      "value": "Example known warning text"
+    },
+    {
+      "type": "regex",
+      "value": "^Some warning prefix.*$",
+      "flags": "i"
+    }
+  ]
+}

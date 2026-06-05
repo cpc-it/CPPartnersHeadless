@@ -54,6 +54,14 @@ jobs:
           path: artifacts/metadata-audit.json
           if-no-files-found: ignore
 
+      - name: Upload console smoke report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: console-smoke-report
+          path: artifacts/console-smoke.json
+          if-no-files-found: ignore
+
       - name: Upload app log on failure
         if: failure()
         uses: actions/upload-artifact@v4

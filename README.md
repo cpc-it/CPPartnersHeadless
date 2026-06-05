@@ -113,7 +113,7 @@ The development server uses `faust dev`.
 - `npm run wpe-build`
   - same as `npm run build`; likely intended for WP Engine/Atlas build environments
 - `npm run test:browser-checks:ci`
-  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci`, `test:button-state-smoke:ci`, and `test:metadata-audit:ci`) for deploy or pull request gating
+  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci`, `test:button-state-smoke:ci`, `test:homepage-console-smoke:ci`, and `test:metadata-audit:ci`) for deploy or pull request gating
 - `npm run generate`
   - regenerates `possibleTypes.json`
 
@@ -133,6 +133,10 @@ The development server uses `faust dev`.
   - runs Playwright-based UI checks for shared primary button states on `/search` and `/404` after entering a query that yields a visible `Load more` button
 - `npm run test:button-state-smoke:ci`
   - same button-state suite with an explicit CI-safe `BASE_URL` fallback
+- `npm run test:homepage-console-smoke`
+  - opens the homepage in Playwright, records browser console events, and fails on any console errors
+- `npm run test:homepage-console-smoke:ci`
+  - same console smoke suite with an explicit CI-safe `BASE_URL` fallback
 - `npm run format`
   - runs Prettier write mode across JS/JSX/Markdown/CSS/SCSS files
 - `npm run format:check`
@@ -245,7 +249,45 @@ Use these commands locally when you want the same checks on demand:
 - `npm run dev:checks`
 - `npm run test:browser-checks:ci`
 
-The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs the browser checks suite, and uploads the metadata audit report plus the app log when failures occur.
+The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs the browser checks suite, and uploads the metadata audit report, the homepage console smoke report, and the app log when failures occur.
+
+## Homepage console smoke checks
+
+Run locally:
+
+```bash
+npm run test:homepage-console-smoke
+```
+
+Or against a different environment:
+
+```bash
+BASE_URL=https://your-env.example npm run test:homepage-console-smoke:ci
+```
+
+Default behavior:
+
+- target route: `/`
+- fails on any browser `console.error` or uncaught `pageerror`
+- records warnings but does not fail on warnings unless configured
+- writes a JSON report to `artifacts/console-smoke.json`
+
+To tighten warning handling over time, provide a config file and enable warning failures:
+
+```bash
+CONSOLE_SMOKE_CONFIG=artifacts/console-smoke.config.example.json \
+  npm run test:homepage-console-smoke -- --fail-on-warnings
+```
+
+Config options:
+
+- `route`: route to test (default `/`)
+- `failOnWarnings`: fail when warnings are present and not allowlisted
+- `warningAllowlist`: list of warning rules to ignore temporarily
+  - `{"type":"substring","value":"..."}`
+  - `{"type":"regex","value":"...","flags":"i"}`
+
+The repository includes an example config at `artifacts/console-smoke.config.example.json`.
 
 ## Button state smoke checks
 
