@@ -3,6 +3,7 @@
 $nav-collapse-breakpoint: 1212px;
 $nav-motion-duration: 280ms;
 $nav-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+$nav-drawer-duration: 120ms;
 
 .header {
   color: var(--color-white);
@@ -185,33 +186,12 @@ $nav-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(15, 23, 42, 0.28);
   opacity: 0;
   pointer-events: none;
-  transition: opacity $nav-motion-duration $nav-motion-ease;
+  transition: opacity $nav-drawer-duration $nav-motion-ease;
 
   &.show {
     opacity: 1;
     pointer-events: auto;
   }
-
-  @media (min-width: $nav-collapse-breakpoint) {
-    display: none;
-  }
-}
-
-.mobile-close {
-  position: fixed;
-  top: 1.4rem;
-  right: 1.4rem;
-  z-index: 10000002;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--color-primary);
-  color: #fff;
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.22);
 
   @media (min-width: $nav-collapse-breakpoint) {
     display: none;
@@ -238,9 +218,9 @@ $nav-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
-    transition: transform $nav-motion-duration $nav-motion-ease,
-      opacity $nav-motion-duration $nav-motion-ease,
-      visibility 0s linear $nav-motion-duration;
+    transition: transform $nav-drawer-duration $nav-motion-ease,
+      opacity $nav-drawer-duration $nav-motion-ease,
+      visibility 0s linear $nav-drawer-duration;
     overflow-y: auto;
     z-index: 10000000;
   }
@@ -250,6 +230,7 @@ $nav-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateX(0);
       opacity: 1;
       visibility: visible;
+      transition-delay: 0s, 0s, 0s;
     }
   }
 

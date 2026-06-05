@@ -17,6 +17,8 @@ export default function Header({ className, menuItems }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [expandedItems, setExpandedItems] = useState([]);
   const [hoveredDesktopItemId, setHoveredDesktopItemId] = useState(null);
+  const [backdropTopOffset, setBackdropTopOffset] = useState(0);
+  const headerRef = useRef(null);
   const menuRef = useRef(null);
   const router = useRouter();
 
@@ -139,6 +141,28 @@ export default function Header({ className, menuItems }) {
     };
   }, [isNavShown]);
 
+  useEffect(() => {
+    if (!isNavShown) {
+      setBackdropTopOffset(0);
+      return undefined;
+    }
+
+    const syncBackdropOffset = () => {
+      const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      setBackdropTopOffset(Math.max(0, Math.round(headerBottom)));
+    };
+
+    syncBackdropOffset();
+
+    window.addEventListener('resize', syncBackdropOffset);
+    window.addEventListener('scroll', syncBackdropOffset);
+
+    return () => {
+      window.removeEventListener('resize', syncBackdropOffset);
+      window.removeEventListener('scroll', syncBackdropOffset);
+    };
+  }, [isNavShown, isScrolled]);
+
   // Handle submenu overflow flipping
   useEffect(() => {
     const items = menuRef.current?.querySelectorAll('li.hasChildren') || [];
@@ -211,7 +235,7 @@ export default function Header({ className, menuItems }) {
   }, [menuItems]);
 
   return (
-    <header className={headerClasses}>
+    <header className={headerClasses} ref={headerRef}>
       <div className={logoWrapClasses}>
         <div className="container">
           <div className={cx('logo')}>
@@ -265,9 +289,10 @@ export default function Header({ className, menuItems }) {
           <button
             type="button"
             className={cx('nav-backdrop', { show: isNavShown })}
-            aria-label="Close navigation"
+            aria-label="Dismiss navigation overlay"
             tabIndex={isNavShown ? 0 : -1}
             onClick={closeNavigation}
+            style={isNavShown ? { top: `${backdropTopOffset}px` } : undefined}
           />
 
           <NavigationMenu
@@ -290,17 +315,6 @@ export default function Header({ className, menuItems }) {
               </li>
             ) : null}
           </NavigationMenu>
-
-          {isNavShown ? (
-            <button
-              type="button"
-              className={cx('mobile-close')}
-              aria-label="Close navigation"
-              onClick={closeNavigation}
-            >
-              <FaTimes aria-hidden="true" />
-            </button>
-          ) : null}
         </div>
       </div>
     </header>
