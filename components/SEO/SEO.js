@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+
 import { getPublicSiteOrigin } from '../../utilities/normalizeInternalLink';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.jpeg';
