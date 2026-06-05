@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { getPublicSiteOrigin } from '../../utilities/normalizeInternalLink';
+import {
+  getPublicSiteOrigin,
+  normalizeMetadataUrl,
+} from '../../utilities/normalizeInternalLink';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.jpeg';
 
@@ -50,7 +53,7 @@ export default function SEO({
   const effectiveImageUrl = toAbsoluteUrl(imageUrl) || fallbackImageUrl;
 
   // Use the explicit url prop when provided; otherwise derive from current path for indexable pages.
-  const effectiveUrl = url || (!noindex ? `${getPublicSiteOrigin()}${router.asPath}` : undefined);
+  const effectiveUrl = normalizeMetadataUrl(url || (!noindex ? router.asPath : undefined));
 
   if (!title && !description && !keywords && !effectiveImageUrl && !effectiveUrl && !noindex) {
     return null;
@@ -92,6 +95,7 @@ export default function SEO({
 
         {effectiveUrl && (
           <>
+            <link rel="canonical" href={effectiveUrl} />
             <meta property="og:url" content={effectiveUrl} />
             <meta property="twitter:url" content={effectiveUrl} />
           </>
