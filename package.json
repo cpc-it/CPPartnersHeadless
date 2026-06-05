@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "faust dev",
     "build": "faust build",
+    "test:nav-hover-smoke": "node scripts/nav-hover-smoke.mjs",
     "generate": "faust generatePossibleTypes",
     "start": "faust start",
     "lint": "faust lint",
@@ -43,6 +44,7 @@
     "eslint-config-next": "12.0.10",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
+    "playwright": "^1.60.0",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "sass": "^1.54.9"

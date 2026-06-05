@@ -414,6 +414,7 @@ $nav-collapse-breakpoint: 1212px;
     }
   }
 
+  :global(li.hover-open > ul),
   :global(li:hover > ul),
   :global(li:focus-within > ul) {
     @media (min-width: $nav-collapse-breakpoint) {

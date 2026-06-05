@@ -16,6 +16,7 @@ export default function Header({ className, menuItems }) {
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [expandedItems, setExpandedItems] = useState([]);
+  const [hoveredDesktopItemId, setHoveredDesktopItemId] = useState(null);
   const menuRef = useRef(null);
   const router = useRouter();
 
@@ -34,6 +35,7 @@ export default function Header({ className, menuItems }) {
   const closeNavigation = () => {
     setIsNavShown(false);
     setExpandedItems([]);
+    setHoveredDesktopItemId(null);
   };
 
   const toggleNavigation = () => {
@@ -54,6 +56,16 @@ export default function Header({ className, menuItems }) {
         ? current.filter((id) => id !== itemId)
         : [...current, itemId]
     );
+  };
+
+  const handleDesktopHoverStart = (itemId) => {
+    if (typeof window !== 'undefined' && window.innerWidth >= NAV_COLLAPSE_BREAKPOINT) {
+      setHoveredDesktopItemId(itemId);
+    }
+  };
+
+  const handleDesktopHoverEnd = (itemId) => {
+    setHoveredDesktopItemId((current) => (current === itemId ? null : current));
   };
 
   const handleHomeClick = (event) => {
@@ -85,6 +97,17 @@ export default function Header({ className, menuItems }) {
   useEffect(() => {
     closeNavigation();
   }, [router.asPath]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < NAV_COLLAPSE_BREAKPOINT) {
+        setHoveredDesktopItemId(null);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!isNavShown) {
@@ -247,6 +270,9 @@ export default function Header({ className, menuItems }) {
             onNavigate={closeNavigation}
             expandedItems={expandedItems}
             onToggleItem={toggleExpandedItem}
+            hoveredDesktopItemId={hoveredDesktopItemId}
+            onDesktopHoverStart={handleDesktopHoverStart}
+            onDesktopHoverEnd={handleDesktopHoverEnd}
           >
             {isNavShown ? (
               <li className="mobile-search-link">

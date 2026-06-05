@@ -13,6 +13,9 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     onNavigate,
     expandedItems = [],
     onToggleItem,
+    hoveredDesktopItemId,
+    onDesktopHoverStart,
+    onDesktopHoverEnd,
   },
   ref
 ) {
@@ -44,6 +47,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     return items.map((item) => {
       const hasChildren = item.children?.length > 0;
       const isExpanded = expandedItems.includes(item.id);
+      const isDesktopHovered = hoveredDesktopItemId === item.id;
       const submenuId = `submenu-${item.id}`;
       const href = normalizeInternalLink(item.path ?? '');
       const target = item.target || undefined;
@@ -56,9 +60,18 @@ const NavigationMenu = forwardRef(function NavigationMenu(
           className={[
             hasChildren ? 'hasChildren' : '',
             isExpanded ? 'expanded' : '',
+            isDesktopHovered ? 'hover-open' : '',
           ]
             .filter(Boolean)
             .join(' ')}
+          onMouseEnter={
+            hasChildren && depth === 0
+              ? () => onDesktopHoverStart?.(item.id)
+              : undefined
+          }
+          onMouseLeave={
+            hasChildren && depth === 0 ? () => onDesktopHoverEnd?.(item.id) : undefined
+          }
         >
           <div className="menu-link-row">
             {isExternalLink || target ? (
