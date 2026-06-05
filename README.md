@@ -144,7 +144,15 @@ Run the crawler locally or in CI:
 npm run test:metadata-audit
 ```
 
-The audit uses Playwright to open the home page at `BASE_URL`, follows same-origin links it discovers, and validates rendered metadata on each crawled page. A page is treated as non-indexable and skipped from required-field validation when it renders `meta[name="robots"]` containing `noindex`.
+The audit uses Playwright to open the home page at `BASE_URL`, follows same-origin links it discovers, and validates rendered metadata on each crawled page.
+
+By default:
+
+- any page rendering `meta[name="robots"]` with `noindex` is skipped
+- pages that resolve to 404 templates are skipped
+- every discovered route is in scope
+
+You can override those defaults with a JSON config file (`--config` or `METADATA_AUDIT_CONFIG`) to focus on actionable SEO gaps and suppress known false positives.
 
 Required metadata on indexable pages:
 
@@ -166,7 +174,56 @@ Options:
 - set `BASE_URL` to target a different environment
 - set `METADATA_AUDIT_REPORT` to change the default report file path
 - pass `--report path/to/report.json` to override the output file for a single run
+- set `METADATA_AUDIT_CONFIG` to load a route/policy config file
+- pass `--config path/to/config.json` to override config path for a single run
 - set `METADATA_AUDIT_MAX_PAGES` to cap crawl size (default `500`)
+
+Config schema:
+
+```json
+{
+  "routes": {
+    "allowlist": [],
+    "denylist": []
+  },
+  "noindex": {
+    "mode": "skip",
+    "allowlist": [],
+    "denylist": []
+  },
+  "notFound": {
+    "mode": "skip",
+    "allowlist": [],
+    "denylist": []
+  }
+}
+```
+
+Policy behavior:
+
+- `routes.allowlist`: if non-empty, only matching routes are auditable
+- `routes.denylist`: matching routes are always skipped
+- `noindex.mode` and `notFound.mode`: `skip` or `audit`
+- `noindex.allowlist` / `notFound.allowlist`: matching routes are forced to `audit`, all others are `skip`
+- `noindex.denylist` / `notFound.denylist`: matching routes are forced to `skip`
+- patterns support `*` (single path segment wildcard) and `**` (multi-segment wildcard)
+
+Example config for known noindex and 404 routes:
+
+```json
+{
+  "routes": {
+    "denylist": ["/preview/**"]
+  },
+  "noindex": {
+    "mode": "audit",
+    "denylist": ["/search", "/404"]
+  },
+  "notFound": {
+    "mode": "skip"
+  }
+}
+```
 
 Exit behavior:
 
@@ -189,6 +246,12 @@ Report shape example:
 ```json
 {
   "baseUrl": "http://localhost:3002/",
+  "configPath": "/absolute/path/to/metadata-audit.config.json",
+  "config": {
+    "routes": { "allowlist": [], "denylist": [] },
+    "noindex": { "mode": "skip", "allowlist": [], "denylist": [] },
+    "notFound": { "mode": "skip", "allowlist": [], "denylist": [] }
+  },
   "generatedAt": "2026-06-04T00:00:00.000Z",
   "requiredFields": [
     "title",

@@ -1,17 +1,36 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3002';
 const DEFAULT_REPORT_PATH = process.env.METADATA_AUDIT_REPORT || 'artifacts/metadata-audit.json';
+const DEFAULT_CONFIG_PATH = process.env.METADATA_AUDIT_CONFIG || null;
 const REQUIRED_FIELDS = ['title', 'description', 'og:title', 'og:description', 'og:url', 'og:image'];
 const SKIPPED_PROTOCOLS = new Set(['mailto:', 'tel:', 'javascript:']);
 const MAX_PAGES = Number.parseInt(process.env.METADATA_AUDIT_MAX_PAGES || '500', 10);
 const NAVIGATION_TIMEOUT = Number.parseInt(process.env.METADATA_AUDIT_TIMEOUT || '45000', 10);
 
+const DEFAULT_AUDIT_CONFIG = {
+  routes: {
+    allowlist: [],
+    denylist: [],
+  },
+  noindex: {
+    mode: 'skip',
+    allowlist: [],
+    denylist: [],
+  },
+  notFound: {
+    mode: 'skip',
+    allowlist: [],
+    denylist: [],
+  },
+};
+
 function parseArgs(argv) {
   const options = {
     reportPath: DEFAULT_REPORT_PATH,
+    configPath: DEFAULT_CONFIG_PATH,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -19,6 +38,12 @@ function parseArgs(argv) {
 
     if (arg === '--report') {
       options.reportPath = argv[index + 1] || options.reportPath;
+      index += 1;
+      continue;
+    }
+
+    if (arg === '--config') {
+      options.configPath = argv[index + 1] || options.configPath;
       index += 1;
     }
   }
@@ -43,9 +68,113 @@ function normalizeUrl(value) {
   return url.toString();
 }
 
+function normalizePathname(value) {
+  if (!value || value === '/') {
+    return '/';
+  }
+
+  return value.endsWith('/') ? value.slice(0, -1) : value;
+}
+
 function getAuditPathname(value) {
   const url = new URL(value);
   return `${url.pathname || '/'}${url.search}`;
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function routePatternToRegex(pattern) {
+  const tokens = pattern.split('**');
+  const escaped = tokens.map((token) => escapeRegExp(token).replace(/\\\*/g, '[^/]*')).join('.*');
+  return new RegExp(`^${escaped}$`);
+}
+
+function matchRoutePattern(pattern, routePathname, routeWithSearch) {
+  const target = pattern.includes('?') ? routeWithSearch : routePathname;
+  return routePatternToRegex(pattern).test(target);
+}
+
+function matchesAnyPattern(patterns, routePathname, routeWithSearch) {
+  return patterns.some((pattern) => matchRoutePattern(pattern, routePathname, routeWithSearch));
+}
+
+function sanitizePatternList(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((entry) => typeof entry === 'string' && entry.trim().length > 0);
+}
+
+function normalizeMode(value, fallback) {
+  return value === 'audit' || value === 'skip' ? value : fallback;
+}
+
+function sanitizeAuditConfig(rawConfig) {
+  const routes = rawConfig?.routes ?? {};
+  const noindex = rawConfig?.noindex ?? {};
+  const notFound = rawConfig?.notFound ?? {};
+
+  return {
+    routes: {
+      allowlist: sanitizePatternList(routes.allowlist),
+      denylist: sanitizePatternList(routes.denylist),
+    },
+    noindex: {
+      mode: normalizeMode(noindex.mode, DEFAULT_AUDIT_CONFIG.noindex.mode),
+      allowlist: sanitizePatternList(noindex.allowlist),
+      denylist: sanitizePatternList(noindex.denylist),
+    },
+    notFound: {
+      mode: normalizeMode(notFound.mode, DEFAULT_AUDIT_CONFIG.notFound.mode),
+      allowlist: sanitizePatternList(notFound.allowlist),
+      denylist: sanitizePatternList(notFound.denylist),
+    },
+  };
+}
+
+async function loadAuditConfig(configPath) {
+  if (!configPath) {
+    return {
+      config: DEFAULT_AUDIT_CONFIG,
+      source: null,
+    };
+  }
+
+  const absoluteConfigPath = path.isAbsolute(configPath) ? configPath : path.join(process.cwd(), configPath);
+  const contents = await readFile(absoluteConfigPath, 'utf8');
+  const parsed = JSON.parse(contents);
+
+  return {
+    config: sanitizeAuditConfig(parsed),
+    source: absoluteConfigPath,
+  };
+}
+
+function getRoutePolicyReason(routePathname, routeWithSearch, routeConfig) {
+  if (matchesAnyPattern(routeConfig.denylist, routePathname, routeWithSearch)) {
+    return 'route-denylist';
+  }
+
+  if (routeConfig.allowlist.length > 0 && !matchesAnyPattern(routeConfig.allowlist, routePathname, routeWithSearch)) {
+    return 'route-not-allowlisted';
+  }
+
+  return null;
+}
+
+function resolveScopedPolicy(policyConfig, routePathname, routeWithSearch) {
+  if (matchesAnyPattern(policyConfig.denylist, routePathname, routeWithSearch)) {
+    return 'skip';
+  }
+
+  if (policyConfig.allowlist.length > 0) {
+    return matchesAnyPattern(policyConfig.allowlist, routePathname, routeWithSearch) ? 'audit' : 'skip';
+  }
+
+  return policyConfig.mode;
 }
 
 function isInternalHttpUrl(href, origin) {
@@ -117,13 +246,14 @@ async function extractPageData(page, currentUrl, origin) {
         links,
         metadata,
         robots,
+        title: document.title?.trim() || '',
       };
     },
     { pageUrl: currentUrl, pageOrigin: origin }
   );
 }
 
-async function crawlSite({ baseUrl, reportPath }) {
+async function crawlSite({ baseUrl, reportPath, auditConfig, configPath }) {
   const origin = new URL(baseUrl).origin;
   const startUrl = normalizeUrl(baseUrl);
   const browser = await chromium.launch({ headless: true });
@@ -176,15 +306,40 @@ async function crawlSite({ baseUrl, reportPath }) {
         }
 
         const pageData = await extractPageData(page, finalUrl, origin);
-        const missing = pageData.indexable
-          ? REQUIRED_FIELDS.filter((field) => !pageData.metadata[field])
-          : [];
+        const routeWithSearch = getAuditPathname(finalUrl);
+        const routePathname = normalizePathname(new URL(finalUrl).pathname || '/');
+        const routePolicyReason = getRoutePolicyReason(routePathname, routeWithSearch, auditConfig.routes);
+        const isNotFoundTemplate = status === 404 || /^404\b/i.test(pageData.title || '');
+        const noindexPolicy = resolveScopedPolicy(auditConfig.noindex, routePathname, routeWithSearch);
+        const notFoundPolicy = resolveScopedPolicy(auditConfig.notFound, routePathname, routeWithSearch);
+        const shouldSkipForNoindex = pageData.indexable ? false : noindexPolicy === 'skip';
+        const shouldSkipForNotFound = isNotFoundTemplate ? notFoundPolicy === 'skip' : false;
+
+        let skippedReason = null;
+        if (routePolicyReason) {
+          skippedReason = routePolicyReason;
+        } else if (shouldSkipForNotFound) {
+          skippedReason = 'not-found-template';
+        } else if (shouldSkipForNoindex) {
+          skippedReason = 'noindex';
+        }
+
+        const auditable = skippedReason === null;
+        const missing = auditable ? REQUIRED_FIELDS.filter((field) => !pageData.metadata[field]) : [];
         const pageResult = {
-          url: getAuditPathname(finalUrl),
+          url: routeWithSearch,
           finalUrl,
           status,
-          indexable: pageData.indexable,
-          skippedReason: pageData.indexable ? null : 'noindex',
+          indexable: auditable,
+          pageFlags: {
+            noindex: !pageData.indexable,
+            notFoundTemplate: isNotFoundTemplate,
+          },
+          policy: {
+            noindex: noindexPolicy,
+            notFound: notFoundPolicy,
+          },
+          skippedReason,
           robots: pageData.robots,
           metadata: pageData.metadata,
           missing,
@@ -192,7 +347,7 @@ async function crawlSite({ baseUrl, reportPath }) {
 
         results.push(pageResult);
 
-        if (pageData.indexable && missing.length > 0) {
+        if (auditable && missing.length > 0) {
           failures.push({
             url: pageResult.url,
             missing,
@@ -225,6 +380,8 @@ async function crawlSite({ baseUrl, reportPath }) {
 
   const report = {
     baseUrl: startUrl,
+    configPath,
+    config: auditConfig,
     generatedAt: new Date().toISOString(),
     requiredFields: REQUIRED_FIELDS,
     totals: {
@@ -254,9 +411,12 @@ async function main() {
   const options = parseArgs(process.argv.slice(2));
 
   try {
+    const { config: auditConfig, source: configPath } = await loadAuditConfig(options.configPath);
     const { report, reportPath } = await crawlSite({
       baseUrl: BASE_URL,
       reportPath: options.reportPath,
+      auditConfig,
+      configPath,
     });
 
     console.error(

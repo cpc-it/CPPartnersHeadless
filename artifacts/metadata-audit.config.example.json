@@ -1,0 +1,16 @@
+{
+  "routes": {
+    "allowlist": [],
+    "denylist": ["/preview/**"]
+  },
+  "noindex": {
+    "mode": "audit",
+    "allowlist": [],
+    "denylist": ["/search", "/404"]
+  },
+  "notFound": {
+    "mode": "skip",
+    "allowlist": [],
+    "denylist": []
+  }
+}

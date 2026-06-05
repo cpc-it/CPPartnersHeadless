@@ -1,15 +1,20 @@
 {
   "baseUrl": "http://localhost:3002/",
-  "configPath": null,
+  "configPath": "/Users/brianchenoweth/Sites/CPPartnersHeadless/artifacts/metadata-audit.config.example.json",
   "config": {
     "routes": {
       "allowlist": [],
-      "denylist": []
+      "denylist": [
+        "/preview/**"
+      ]
     },
     "noindex": {
-      "mode": "skip",
+      "mode": "audit",
       "allowlist": [],
-      "denylist": []
+      "denylist": [
+        "/search",
+        "/404"
+      ]
     },
     "notFound": {
       "mode": "skip",
@@ -17,7 +22,7 @@
       "denylist": []
     }
   },
-  "generatedAt": "2026-06-05T04:37:20.037Z",
+  "generatedAt": "2026-06-05T04:37:57.761Z",
   "requiredFields": [
     "title",
     "description",
@@ -47,7 +52,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -99,7 +104,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -125,7 +130,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -151,7 +156,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -177,7 +182,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -203,7 +208,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -229,7 +234,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -255,7 +260,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -281,7 +286,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -307,7 +312,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -333,7 +338,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -359,7 +364,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -385,7 +390,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -411,7 +416,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -437,7 +442,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -463,7 +468,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -489,7 +494,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -515,7 +520,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -541,7 +546,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -567,7 +572,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -593,7 +598,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -619,7 +624,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -645,7 +650,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -671,7 +676,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -697,7 +702,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -723,7 +728,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -749,7 +754,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -775,7 +780,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -801,7 +806,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -827,7 +832,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -853,7 +858,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -879,7 +884,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -905,7 +910,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
@@ -931,7 +936,7 @@
         "notFoundTemplate": false
       },
       "policy": {
-        "noindex": "skip",
+        "noindex": "audit",
         "notFound": "skip"
       },
       "skippedReason": null,
