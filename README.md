@@ -138,6 +138,8 @@ The development server uses `faust dev`.
 
 ## Metadata audit
 
+Standards and ownership reference: [SEO_METADATA_STANDARDS.md](SEO_METADATA_STANDARDS.md).
+
 Run the crawler locally or in CI:
 
 ```bash
