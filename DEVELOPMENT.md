@@ -1,5 +1,9 @@
 # Development
 
+## Frontend standards
+
+Implementation and review guardrails for Next Image usage and stylesheet placement live in [README.md](/Users/brianchenoweth/Sites/CPPartnersHeadless/README.md#frontend-standards). Treat that section as the current team standard when reviewing UI changes.
+
 ## Updating the ACM Blueprint Export
 
 ### Importing

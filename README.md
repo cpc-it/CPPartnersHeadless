@@ -144,6 +144,74 @@ The development server uses `faust dev`.
 - `npm run clean`
   - deletes `.next` and `node_modules`
 
+## Frontend standards
+
+Use these guardrails during implementation and review to avoid reintroducing deprecated Next.js patterns.
+
+### Next Image
+
+Prefer `next/image` with explicit sizing data. Provide `width` and `height` when the asset dimensions are known, add a `sizes` hint for responsive layouts, and use inline style or a wrapper class for presentation.
+
+Bad:
+
+```jsx
+import Image from 'next/image';
+
+<Image
+  src={hero.sourceUrl}
+  layout="responsive"
+  objectFit="cover"
+  alt={hero.altText}
+/>
+```
+
+Good:
+
+```jsx
+import Image from 'next/image';
+
+<Image
+  src={hero.sourceUrl}
+  width={hero.mediaDetails.width}
+  height={hero.mediaDetails.height}
+  alt={hero.altText || ''}
+  sizes="(max-width: 768px) 100vw, 1200px"
+  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+/>
+```
+
+If the layout truly needs fill behavior, use `fill` with a positioned wrapper and keep sizing intent in `sizes` rather than reviving legacy props.
+
+### Stylesheet placement
+
+Global styles belong in [pages/_app.js](/Users/brianchenoweth/Sites/CPPartnersHeadless/pages/_app.js) only. Component styles belong beside the component as `*.module.scss` imports. Do not import global Sass files from components, templates, or route files other than `_app.js`.
+
+Bad:
+
+```jsx
+import '../../styles/main.scss';
+import '../../styles/_Typography.scss';
+```
+
+Good:
+
+```jsx
+import styles from './Header.module.scss';
+```
+
+Good for app-wide styles:
+
+```jsx
+import '../styles/main.scss';
+```
+
+### Reviewer checklist
+
+- Does each new `Image` use modern props (`width`/`height` or `fill`) instead of `layout`, `objectFit`, or `objectPosition` props?
+- Does each responsive `Image` include an intentional `sizes` value?
+- Are global stylesheet imports limited to [pages/_app.js](/Users/brianchenoweth/Sites/CPPartnersHeadless/pages/_app.js)?
+- Are component-level styles imported from a local `*.module.scss` file instead of shared global Sass partials?
+
 ## Metadata audit
 
 Standards and ownership reference: [SEO_METADATA_STANDARDS.md](SEO_METADATA_STANDARDS.md).
