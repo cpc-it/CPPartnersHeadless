@@ -14,7 +14,12 @@ import {
   NavigationMenu,
 } from 'components';
 import { getNextStaticProps } from '@faustwp/core';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+  pageTitle,
+} from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import appConfig from 'app.config';
 
@@ -43,6 +48,7 @@ export default function Page() {
     content: description,
     seedKeywords: ['latest posts', 'news', 'blog', 'cal poly partners'],
   });
+  const postsUrl = normalizeInternalLink('/posts/', { absolute: true });
 
   return (
     <>
@@ -50,6 +56,7 @@ export default function Page() {
         title={pageTitle(data?.generalSettings, 'Latest Posts')}
         description={description}
         keywords={keywords}
+        url={postsUrl}
       />
 
       <Header menuItems={primaryMenu} />

@@ -13,7 +13,11 @@ import {
   SEO,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
-import { buildKeywordString, buildMetaDescription } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+} from 'utilities';
 
 export default function Component(props) {
   // Loading state for previews
@@ -42,6 +46,9 @@ export default function Component(props) {
       'event planning',
     ],
   });
+  const projectUrl = normalizeInternalLink(props?.data?.project?.uri || '/projects/', {
+    absolute: true,
+  });
   return (
     <>
       <SEO
@@ -49,6 +56,7 @@ export default function Component(props) {
         description={description}
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
+        url={projectUrl}
       />
 
       <Header menuItems={primaryMenu} />
@@ -84,6 +92,7 @@ Component.query = gql`
     $asPreview: Boolean = false
   ) {
     project(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      uri
       projectFields {
         title: projectTitle
         summary

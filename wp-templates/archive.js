@@ -1,6 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
 import appConfig from 'app.config';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+  pageTitle,
+} from 'utilities';
 
 import * as MENUS from '../constants/menus';
 import { BlogInfoFragment } from '../fragments/GeneralSettings';
@@ -42,6 +47,7 @@ export default function Archive(props) {
     content: data?.nodeByUri?.description,
     seedKeywords: [name, 'archive', 'cal poly partners', 'conference planning'],
   });
+  const archiveUrl = normalizeInternalLink(uri || '/', { absolute: true });
 
   return (
     <>
@@ -49,6 +55,7 @@ export default function Archive(props) {
         title={pageTitle(props?.data?.generalSettings, archiveTitle, siteTitle)}
         description={archiveDescription || siteDescription}
         keywords={archiveKeywords}
+        url={archiveUrl}
       />
       <Header
         title={siteTitle}

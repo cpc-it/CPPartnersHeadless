@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
-import { buildKeywordString } from 'utilities';
+import { buildKeywordString, normalizeInternalLink } from 'utilities';
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,6 +63,7 @@ export default function Page() {
     content: description,
     seedKeywords: ['404', 'page not found', 'site search', 'cal poly partners'],
   });
+  const pageUrl = normalizeInternalLink('/404/', { absolute: true });
 
   return (
     <>
@@ -70,6 +71,7 @@ export default function Page() {
         title={`404 - ${siteTitle || 'Page Not Found'}`}
         description={description}
         keywords={keywords}
+        url={pageUrl}
         noindex
       />
 

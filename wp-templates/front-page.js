@@ -22,7 +22,7 @@ import {
   HomepageFoodInsecurity,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
-import { buildKeywordString } from 'utilities';
+import { buildKeywordString, normalizeInternalLink } from 'utilities';
 
 const postsPerPage = 4;
 
@@ -52,6 +52,7 @@ export default function Component() {
       'guest services',
     ],
   });
+  const homeUrl = normalizeInternalLink('/', { absolute: true });
 
   const mainBanner = {
     sourceUrl: '/static/banner.jpeg',
@@ -64,6 +65,7 @@ export default function Component() {
         title={siteTitle}
         description={homeDescription || siteDescription}
         keywords={homeKeywords}
+        url={homeUrl}
       />
 
       <Header

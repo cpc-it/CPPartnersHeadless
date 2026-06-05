@@ -18,7 +18,11 @@ import { useState } from 'react';
 import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
-import { buildKeywordString, buildMetaDescription } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+} from 'utilities';
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,6 +75,7 @@ export default function Page() {
     content: `${searchDescription} ${searchQuery}`,
     seedKeywords: ['search', 'site search', 'cal poly partners'],
   });
+  const searchUrl = normalizeInternalLink('/search/', { absolute: true });
 
   return (
     <>
@@ -78,6 +83,7 @@ export default function Page() {
         title={searchQuery ? `${searchQuery} Search - ${siteTitle}` : `Search - ${siteTitle}`}
         description={searchDescription || siteDescription}
         keywords={searchKeywords}
+        url={searchUrl}
       />
 
       <Header

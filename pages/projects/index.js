@@ -14,7 +14,12 @@ import {
   NavigationMenu,
 } from 'components';
 import { getNextStaticProps } from '@faustwp/core';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+  pageTitle,
+} from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import appConfig from 'app.config';
 
@@ -46,12 +51,14 @@ export default function Page() {
     content: description,
     seedKeywords: ['projects', 'portfolio', 'cal poly partners', 'event planning'],
   });
+  const projectsUrl = normalizeInternalLink('/projects/', { absolute: true });
   return (
     <>
       <SEO
         title={pageTitle(data?.generalSettings, 'Projects')}
         description={description}
         keywords={keywords}
+        url={projectsUrl}
       />
 
       <Header menuItems={primaryMenu} />

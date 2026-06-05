@@ -6,7 +6,12 @@ import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+  pageTitle,
+} from 'utilities';
 
 import {
   Header,
@@ -55,7 +60,7 @@ export default function Component(props) {
     props?.data?.generalSettings;
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
   const footerMenu = props?.data?.footerMenuItems?.nodes ?? [];
-  const { title, content, featuredImage, slug, seoControls } = pageData ?? {};
+  const { title, content, featuredImage, slug, seoControls, uri } = pageData ?? {};
   const noindex = !!seoControls?.disableIndexing;
   const description = buildMetaDescription({
     title,
@@ -70,6 +75,9 @@ export default function Component(props) {
   const newsPostsConnection = newsQuery.data?.posts ?? props?.data?.posts;
   const recentPosts =
     newsPostsConnection?.edges?.map((edge) => edge?.node).filter(Boolean) ?? [];
+  const pageUrl = normalizeInternalLink(uri || (slug ? `/${slug}/` : '/'), {
+    absolute: true,
+  });
 
   // Replace the marker with a stable placeholder DIV for SSR
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
@@ -90,6 +98,7 @@ export default function Component(props) {
         description={description}
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
+        url={pageUrl}
         noindex={noindex}
       />
       <Header
@@ -162,6 +171,7 @@ Component.query = gql`
       title
       content
       slug
+      uri
       seoControls {
         disableIndexing
       }

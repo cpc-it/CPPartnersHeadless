@@ -12,7 +12,12 @@ import {
   Posts,
 } from 'components';
 import Image from 'next/image';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  normalizeInternalLink,
+  pageTitle,
+} from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
 export default function Component(props) {
@@ -29,6 +34,7 @@ export default function Component(props) {
   const {
     title,
     content,
+    uri,
     featuredImage,
     date,
     author: wpAuthor,
@@ -52,6 +58,7 @@ export default function Component(props) {
       'event planning',
     ],
   });
+  const postUrl = normalizeInternalLink(uri || '/posts/', { absolute: true });
 
   // 🔹 Date formatter
   function formatDate(dateString) {
@@ -86,6 +93,7 @@ export default function Component(props) {
         description={description}
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
+        url={postUrl}
       />
       <Header
         title={siteTitle}
@@ -229,6 +237,7 @@ Component.query = gql`
     $asPreview: Boolean = false
   ) {
     post(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      uri
       title
       content
       date
