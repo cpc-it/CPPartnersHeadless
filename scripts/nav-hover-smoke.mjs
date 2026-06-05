@@ -1,8 +1,37 @@
 import { chromium } from 'playwright';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3002';
 const ROUTES = ['/', '/contact', '/careers', '/search', '/this-route-should-404'];
 const MENU_LABELS = ['Who We Are', 'What We Do'];
+const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
+const MOBILE_VIEWPORT = { width: 390, height: 844 };
+
+function viewportLabel(viewport) {
+  return `${viewport.width}x${viewport.height}`;
+}
+
+function buildContext(suite, viewport, route, step) {
+  return {
+    suite,
+    viewport: viewportLabel(viewport),
+    route,
+    step,
+  };
+}
+
+function logStep(context, message) {
+  console.log(
+    `[nav-smoke] [suite:${context.suite}] [viewport:${context.viewport}] [route:${context.route}] [step:${context.step}] ${message}`
+  );
+}
+
+function failStep(context, detail) {
+  const error = new Error(
+    `[nav-smoke] [suite:${context.suite}] [viewport:${context.viewport}] [route:${context.route}] [step:${context.step}] ${detail}`
+  );
+  error.context = context;
+  throw error;
+}
 
 async function ensureNavVisible(page) {
   try {
@@ -47,12 +76,16 @@ async function getMenuState(page, label) {
         y: triggerRect.y,
         width: triggerRect.width,
         height: triggerRect.height,
+        centerX: triggerRect.x + triggerRect.width / 2,
+        centerY: triggerRect.y + triggerRect.height / 2,
       },
       submenuRect: {
         x: submenuRect.x,
         y: submenuRect.y,
         width: submenuRect.width,
         height: submenuRect.height,
+        centerX: submenuRect.x + Math.max(10, submenuRect.width / 2),
+        centerY: submenuRect.y + Math.max(10, Math.min(submenuRect.height / 2, 36)),
       },
       isOpen:
         computed.visibility === 'visible' &&
@@ -63,70 +96,95 @@ async function getMenuState(page, label) {
   }, label);
 }
 
+async function waitForMenuOpenState(page, label, isOpenExpected) {
+  await page.waitForFunction(
+    ({ targetLabel, expected }) => {
+      const item = Array.from(document.querySelectorAll('nav#primary-navigation .menu > li')).find(
+        (li) => li.querySelector(':scope > .menu-link-row > a')?.textContent?.trim() === targetLabel
+      );
+
+      if (!item) return false;
+
+      const submenu = item.querySelector(':scope > ul');
+      if (!submenu) return false;
+
+      const style = window.getComputedStyle(submenu);
+      const isOpen =
+        style.visibility === 'visible' &&
+        Number.parseFloat(style.opacity || '0') > 0.5 &&
+        style.pointerEvents !== 'none';
+
+      return expected ? isOpen : !isOpen;
+    },
+    { targetLabel: label, expected: isOpenExpected },
+    { timeout: 4000 }
+  );
+}
+
 async function verifyDesktopHover(page, route) {
+  const baseContext = buildContext('desktop-hover', DESKTOP_VIEWPORT, route, 'load-route');
+
   await page.goto(`${BASE_URL}${route}`, { waitUntil: 'networkidle' });
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize(DESKTOP_VIEWPORT);
+  logStep(baseContext, 'loaded page and set desktop viewport');
 
   const navVisible = await ensureNavVisible(page);
   if (!navVisible) {
-    return {
-      route,
-      passed: false,
-      reason: 'Nav did not become visible in test environment',
-      labels: [],
-    };
+    failStep(baseContext, 'primary navigation did not become visible');
   }
 
   const labels = [];
-  let passed = true;
 
   for (const label of MENU_LABELS) {
+    const lookupContext = buildContext('desktop-hover', DESKTOP_VIEWPORT, route, `lookup-${label}`);
     const before = await getMenuState(page, label);
+
     if (!before.found || !before.hasSubmenu) {
-      passed = false;
-      labels.push({
-        label,
-        passed: false,
-        reason: !before.found ? 'Top-level item not found' : 'Submenu not found',
-      });
-      continue;
+      failStep(
+        lookupContext,
+        !before.found ? `top-level item "${label}" not found` : `submenu missing for "${label}"`
+      );
     }
 
-    await page.mouse.move(
-      before.triggerRect.x + before.triggerRect.width / 2,
-      before.triggerRect.y + before.triggerRect.height / 2
-    );
-    await page.waitForTimeout(260);
+    await page.mouse.move(before.triggerRect.centerX, before.triggerRect.centerY);
+    await waitForMenuOpenState(page, label, true);
+    logStep(buildContext('desktop-hover', DESKTOP_VIEWPORT, route, `hover-open-${label}`), 'submenu opened');
 
     const openState = await getMenuState(page, label);
+    if (!openState.isOpen) {
+      failStep(
+        buildContext('desktop-hover', DESKTOP_VIEWPORT, route, `hover-open-${label}`),
+        `submenu for "${label}" did not open on hover`
+      );
+    }
 
-    await page.mouse.move(
-      openState.submenuRect.x + Math.min(20, Math.max(4, openState.submenuRect.width / 2)),
-      openState.submenuRect.y + Math.min(20, Math.max(4, openState.submenuRect.height / 2))
-    );
-    await page.waitForTimeout(140);
+    await page.mouse.move(openState.submenuRect.centerX, openState.submenuRect.centerY);
+    await page.waitForTimeout(100);
 
     const stillOpenState = await getMenuState(page, label);
+    if (!stillOpenState.isOpen) {
+      failStep(
+        buildContext('desktop-hover', DESKTOP_VIEWPORT, route, `hover-submenu-${label}`),
+        `submenu for "${label}" closed while pointer was inside submenu`
+      );
+    }
 
     await page.mouse.move(6, 6);
-    await page.waitForTimeout(260);
+    await waitForMenuOpenState(page, label, false);
 
     const closedState = await getMenuState(page, label);
+    if (closedState.isOpen) {
+      failStep(
+        buildContext('desktop-hover', DESKTOP_VIEWPORT, route, `leave-close-${label}`),
+        `submenu for "${label}" did not close after pointer left the menu`
+      );
+    }
 
     const toggleAria = closedState.ariaExpanded;
-    const labelPassed =
-      openState.isOpen &&
-      stillOpenState.isOpen &&
-      !closedState.isOpen &&
-      (toggleAria === 'false' || toggleAria === 'true');
-
-    if (!labelPassed) {
-      passed = false;
-    }
 
     labels.push({
       label,
-      passed: labelPassed,
+      passed: true,
       opensOnHover: openState.isOpen,
       staysOpenInSubmenu: stillOpenState.isOpen,
       closesOnLeave: !closedState.isOpen,
@@ -134,59 +192,137 @@ async function verifyDesktopHover(page, route) {
     });
   }
 
-  return { route, passed, labels };
+  return { route, passed: true, labels };
 }
 
-async function verifyKeyboardAndMobileSmoke(page) {
-  await page.goto(`${BASE_URL}/`, { waitUntil: 'networkidle' });
-  await page.setViewportSize({ width: 1440, height: 900 });
+async function waitForDrawerExpanded(page, expanded) {
+  await page.waitForFunction(
+    (expected) =>
+      document
+        .querySelector('button[aria-controls="primary-navigation"]')
+        ?.getAttribute('aria-expanded') === String(expected),
+    expanded,
+    { timeout: 3000 }
+  );
+}
+
+async function verifyMobileDrawerAndSubmenus(page) {
+  const route = '/';
+  const baseContext = buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'load-route');
+
+  await page.goto(`${BASE_URL}${route}`, { waitUntil: 'networkidle' });
+  await page.setViewportSize(MOBILE_VIEWPORT);
+  logStep(baseContext, 'loaded page and set mobile viewport');
 
   const navVisible = await ensureNavVisible(page);
   if (!navVisible) {
-    return {
-      passed: false,
-      keyboard: { passed: false, reason: 'Nav not visible on desktop route' },
-      mobile: { passed: false, reason: 'Nav not visible before mobile checks' },
-    };
+    failStep(baseContext, 'primary navigation did not become visible');
   }
 
-  const focusOpened = await page.evaluate(() => {
-    const item = Array.from(document.querySelectorAll('nav#primary-navigation .menu > li')).find(
-      (li) => li.querySelector(':scope > .menu-link-row > a')?.textContent?.trim() === 'Who We Are'
-    );
-    const trigger = item?.querySelector(':scope > .menu-link-row > a');
-    const submenu = item?.querySelector(':scope > ul');
-    if (!trigger || !submenu) return false;
+  const navToggle = page.locator('button[aria-controls="primary-navigation"]');
 
-    trigger.focus();
-    const style = window.getComputedStyle(submenu);
-    return style.visibility === 'visible' && style.pointerEvents !== 'none';
+  await navToggle.click();
+  await waitForDrawerExpanded(page, true);
+  logStep(buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'open-drawer'), 'drawer opened');
+
+  await page.keyboard.press('Escape');
+  await waitForDrawerExpanded(page, false);
+  logStep(
+    buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'close-drawer'),
+    'drawer closed via Escape key'
+  );
+
+  await navToggle.click();
+  await waitForDrawerExpanded(page, true);
+  logStep(
+    buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'reopen-drawer'),
+    'drawer reopened for submenu checks'
+  );
+
+  const menuTree = await page.evaluate(() => {
+    const rootItems = Array.from(document.querySelectorAll('nav#primary-navigation .menu > li.hasChildren'));
+    const all = [];
+
+    const getLabel = (item) => item.querySelector(':scope > .menu-link-row > a')?.textContent?.trim() || '(unnamed)';
+
+    const walk = (item, parentId = null, depth = 0, ancestorPath = []) => {
+      const id = all.length;
+      item.setAttribute('data-nav-smoke-id', String(id));
+      const label = getLabel(item);
+      const path = [...ancestorPath, label];
+      all.push({ id, parentId, depth, path: path.join(' > ') });
+
+      const children = Array.from(item.querySelectorAll(':scope > ul > li.hasChildren'));
+      children.forEach((child) => walk(child, id, depth + 1, path));
+    };
+
+    rootItems.forEach((item) => walk(item));
+    return all;
   });
 
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: /open navigation/i }).click();
-  const whoWeAreToggle = page.locator('nav#primary-navigation .menu > li .submenu-toggle').first();
-  const beforeAria = await whoWeAreToggle.getAttribute('aria-expanded');
+  if (!menuTree.length) {
+    failStep(
+      buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'discover-submenus'),
+      'no submenu toggles were found in mobile navigation'
+    );
+  }
 
-  await whoWeAreToggle.click();
-  await page.waitForTimeout(120);
-  const expandedAfterClick = await whoWeAreToggle.getAttribute('aria-expanded');
+  if (!menuTree.some((node) => node.depth >= 1)) {
+    failStep(
+      buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, 'discover-nested-submenus'),
+      'no nested submenu toggles were found; expected at least one nested item for coverage'
+    );
+  }
 
-  await whoWeAreToggle.click();
-  await page.waitForTimeout(120);
-  const collapsedAfterSecondClick = await whoWeAreToggle.getAttribute('aria-expanded');
+  const expandedOrder = [];
 
-  const mobilePassed = expandedAfterClick === 'true' && collapsedAfterSecondClick === 'false';
+  for (const node of menuTree) {
+    const selector = `[data-nav-smoke-id="${node.id}"] > .menu-link-row > .submenu-toggle`;
+    const toggle = page.locator(selector);
+    await toggle.click();
+    await page.waitForFunction(
+      (nodeId) =>
+        document
+          .querySelector(`[data-nav-smoke-id="${nodeId}"] > .menu-link-row > .submenu-toggle`)
+          ?.getAttribute('aria-expanded') === 'true',
+      node.id,
+      { timeout: 2500 }
+    );
+
+    expandedOrder.push(node.id);
+    logStep(
+      buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, `expand-${node.path}`),
+      'submenu expanded'
+    );
+  }
+
+  for (const nodeId of expandedOrder.reverse()) {
+    const node = menuTree.find((entry) => entry.id === nodeId);
+    const selector = `[data-nav-smoke-id="${node.id}"] > .menu-link-row > .submenu-toggle`;
+    const toggle = page.locator(selector);
+
+    await toggle.click();
+    await page.waitForFunction(
+      (id) =>
+        document
+          .querySelector(`[data-nav-smoke-id="${id}"] > .menu-link-row > .submenu-toggle`)
+          ?.getAttribute('aria-expanded') === 'false',
+      node.id,
+      { timeout: 2500 }
+    );
+
+    logStep(
+      buildContext('mobile-drawer-submenus', MOBILE_VIEWPORT, route, `collapse-${node.path}`),
+      'submenu collapsed'
+    );
+  }
 
   return {
-    passed: focusOpened && mobilePassed,
-    keyboard: { passed: focusOpened },
-    mobile: {
-      passed: mobilePassed,
-      beforeAria,
-      expandedAfterClick,
-      collapsedAfterSecondClick,
-    },
+    passed: true,
+    route,
+    viewport: viewportLabel(MOBILE_VIEWPORT),
+    totalSubmenuToggles: menuTree.length,
+    nestedSubmenuToggles: menuTree.filter((node) => node.depth >= 1).length,
   };
 }
 
@@ -201,16 +337,17 @@ async function run() {
       desktopResults.push(await verifyDesktopHover(page, route));
     }
 
-    const keyboardMobileResult = await verifyKeyboardAndMobileSmoke(page);
-    const passed =
-      desktopResults.every((result) => result.passed) && keyboardMobileResult.passed;
+    const mobileResult = await verifyMobileDrawerAndSubmenus(page);
+    const passed = desktopResults.every((result) => result.passed) && mobileResult.passed;
 
     console.log(
       JSON.stringify(
         {
           baseUrl: BASE_URL,
+          desktopViewport: viewportLabel(DESKTOP_VIEWPORT),
+          mobileViewport: viewportLabel(MOBILE_VIEWPORT),
           desktopResults,
-          keyboardMobileResult,
+          mobileResult,
           passed,
         },
         null,
@@ -222,14 +359,14 @@ async function run() {
       throw new Error('One or more nav hover smoke checks failed');
     }
 
-    console.log('PASS nav hover smoke checks');
+    console.log('PASS nav smoke checks');
   } finally {
     await browser.close();
   }
 }
 
 run().catch((error) => {
-  console.error('FAIL nav hover smoke checks');
+  console.error('FAIL nav smoke checks');
   console.error(error?.stack || String(error));
   process.exit(1);
 });

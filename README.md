@@ -117,6 +117,10 @@ The development server uses `faust dev`.
 
 - `npm run lint`
   - runs `faust lint`
+- `npm run test:nav-smoke`
+  - runs the headless desktop/mobile navigation smoke suite against `BASE_URL` (defaults to `http://localhost:3002`)
+- `npm run test:nav-smoke:ci`
+  - same smoke suite with an explicit CI-safe `BASE_URL` fallback
 - `npm run format`
   - runs Prettier write mode across JS/JSX/Markdown/CSS/SCSS files
 - `npm run format:check`
@@ -171,7 +175,6 @@ The current `format:check` glob includes generated `.next` files and also report
 
 - The package name in `package.json` is still the starter blueprint name: `@faustjs/atlas-blueprint-portfolio`.
 - The root `README.md` was previously still starter boilerplate, which is what this rewrite replaces.
-- No automated test suite is configured in `package.json`; the repo currently exposes linting and formatting checks only.
 - `npm run format:check` currently scans `.next` build output because the glob is `./**/*.{js,jsx,md,mdx,css,scss}` rather than being limited to source files.
 - `.env.local.sample` does not clearly state whether `FAUST_SECRET_KEY` is required for this project's preview flow, even though a real value exists in local `.env.local`.
 - The contact form implementation is specific to a Cal Poly Partners board-meeting comment workflow and is not currently configurable through environment variables or CMS content.

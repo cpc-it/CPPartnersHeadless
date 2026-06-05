@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "faust dev",
     "build": "faust build",
-    "test:nav-hover-smoke": "node scripts/nav-hover-smoke.mjs",
+    "test:nav-smoke": "node scripts/nav-hover-smoke.mjs",
+    "test:nav-hover-smoke": "npm run test:nav-smoke",
+    "test:nav-smoke:ci": "BASE_URL=${BASE_URL:-http://localhost:3002} node scripts/nav-hover-smoke.mjs",
     "generate": "faust generatePossibleTypes",
     "start": "faust start",
     "lint": "faust lint",
