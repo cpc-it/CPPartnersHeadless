@@ -44,6 +44,16 @@ module.exports = withFaust({
           'https://cms.calpolypartners.org/wp-content/uploads/2025/10/logo_grn.png',
         permanent: true,
       },
+      {
+        source: '/mission-vision-and-values/annual-report-22-23',
+        destination: '/mission-vision-values/annual-report',
+        permanent: true,
+      },
+      {
+        source: '/mission-vision-and-values/annual-report-23-24',
+        destination: '/mission-vision-values/annual-report',
+        permanent: true,
+      },
     ];
   },
 

@@ -1,5 +1,21 @@
 const DEFAULT_PUBLIC_SITE_ORIGIN = 'https://calpolypartners.org';
 const BACKEND_HOSTS = ['hesj5f3wy23f0l5rw0mrh6jsg.js.wpenginepowered.com'];
+const LEGACY_PATH_REDIRECTS = {
+  '/mission-vision-and-values/annual-report-22-23': '/mission-vision-values/annual-report',
+  '/mission-vision-and-values/annual-report-23-24': '/mission-vision-values/annual-report',
+};
+
+function rewriteLegacyPath(pathname) {
+  if (!pathname) {
+    return pathname;
+  }
+
+  const normalizedPathname = pathname.endsWith('/') && pathname !== '/'
+    ? pathname.slice(0, -1)
+    : pathname;
+
+  return LEGACY_PATH_REDIRECTS[normalizedPathname] ?? normalizedPathname;
+}
 
 function getPublicSiteUrl() {
   try {
@@ -36,7 +52,8 @@ export function normalizeInternalLink(href, { absolute = false } = {}) {
   const publicSiteUrl = getPublicSiteUrl();
 
   if (href.startsWith('/')) {
-    return absolute ? `${publicSiteUrl.origin}${href}` : href;
+    const rewrittenPath = rewriteLegacyPath(href);
+    return absolute ? `${publicSiteUrl.origin}${rewrittenPath}` : rewrittenPath;
   }
 
   try {
@@ -50,7 +67,8 @@ export function normalizeInternalLink(href, { absolute = false } = {}) {
       return href;
     }
 
-    const normalizedPath = `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}` || '/';
+    const rewrittenPathname = rewriteLegacyPath(parsedUrl.pathname);
+    const normalizedPath = `${rewrittenPathname}${parsedUrl.search}${parsedUrl.hash}` || '/';
 
     return absolute ? `${publicSiteUrl.origin}${normalizedPath}` : normalizedPath;
   } catch {
