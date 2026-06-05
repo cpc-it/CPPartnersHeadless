@@ -1,0 +1,654 @@
+{
+  "baseUrl": "http://localhost:3002/",
+  "generatedAt": "2026-06-05T04:33:48.857Z",
+  "requiredFields": [
+    "title",
+    "description",
+    "og:title",
+    "og:description",
+    "og:url",
+    "og:image"
+  ],
+  "totals": {
+    "crawled": 35,
+    "indexable": 35,
+    "passing": 35,
+    "failing": 0,
+    "skipped": 0,
+    "crawlErrors": 0
+  },
+  "failures": [],
+  "crawlErrors": [],
+  "pages": [
+    {
+      "url": "/",
+      "finalUrl": "http://localhost:3002/",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly Partners",
+        "description": "Cal Poly Partners supports conferences, events, dining, housing, staffing, and campus experiences with end-to-end planning and on-site coordination.",
+        "og:title": "Cal Poly Partners",
+        "og:description": "Cal Poly Partners supports conferences, events, dining, housing, staffing, and campus experiences with end-to-end planning and on-site coordination.",
+        "og:url": "https://calpolypartners.org/",
+        "og:image": "https://calpolypartners.org/static/banner.jpeg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/search",
+      "finalUrl": "http://localhost:3002/search",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Search - Cal Poly Partners",
+        "description": "Search Cal Poly Partners content, projects, resources, and news.",
+        "og:title": "Search - Cal Poly Partners",
+        "og:description": "Search Cal Poly Partners content, projects, resources, and news.",
+        "og:url": "https://calpolypartners.org/search/",
+        "og:image": "https://calpolypartners.org/static/banner.jpeg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/mission-vision-values",
+      "finalUrl": "http://localhost:3002/mission-vision-values",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Mission, Vision & Values - Cal Poly Partners",
+        "description": "Our Mission We are a strategic partner dedicated to advancing Cal Poly. Through our flexible business model and willingness to take on challenges, we push...",
+        "og:title": "Mission, Vision & Values - Cal Poly Partners",
+        "og:description": "Our Mission We are a strategic partner dedicated to advancing Cal Poly. Through our flexible business model and willingness to take on challenges, we push...",
+        "og:url": "https://calpolypartners.org/mission-vision-values/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/college-graduation-celebration-green-caps-gowns-streamers.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/mission-vision-values/strategic-plan",
+      "finalUrl": "http://localhost:3002/mission-vision-values/strategic-plan",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Strategic Plan - Cal Poly Partners",
+        "description": "Background Cal Poly Partners’ strategic plan serves as a roadmap and will guide the organization for the next three years 2024-26. This plan positions Cal Poly...",
+        "og:title": "Strategic Plan - Cal Poly Partners",
+        "og:description": "Background Cal Poly Partners’ strategic plan serves as a roadmap and will guide the organization for the next three years 2024-26. This plan positions Cal Poly...",
+        "og:url": "https://calpolypartners.org/mission-vision-values/strategic-plan/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/students-descending-staircase-modern-campus-building-brick-wall.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/mission-vision-values/annual-report",
+      "finalUrl": "http://localhost:3002/mission-vision-values/annual-report",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Annual Report - Cal Poly Partners",
+        "description": "Partners in Impact: 2024–25 Year in Review At Cal Poly Partners, we believe our impact is defined by more than what we build—it’s seen in the lives we touch,...",
+        "og:title": "Annual Report - Cal Poly Partners",
+        "og:description": "Partners in Impact: 2024–25 Year in Review At Cal Poly Partners, we believe our impact is defined by more than what we build—it’s seen in the lives we touch,...",
+        "og:url": "https://calpolypartners.org/mission-vision-values/annual-report/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/students-walking-campus-building-lawn.png"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance",
+      "finalUrl": "http://localhost:3002/governance",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Governance - Cal Poly Partners",
+        "description": "The People and Bylaws that Govern Us We are a 501(c)(3) nonprofit organization and one of 86 auxiliaries within the California State University system. In this...",
+        "og:title": "Governance - Cal Poly Partners",
+        "og:description": "The People and Bylaws that Govern Us We are a 501(c)(3) nonprofit organization and one of 86 auxiliaries within the California State University system. In this...",
+        "og:url": "https://calpolypartners.org/governance/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/governance.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance/board-of-directors",
+      "finalUrl": "http://localhost:3002/governance/board-of-directors",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Board of Directors - Cal Poly Partners",
+        "description": "Providing Direction and Guidance Comprised of a notable and representative group of 13 faculty, staff, students and community leaders, our board of directors...",
+        "og:title": "Board of Directors - Cal Poly Partners",
+        "og:description": "Providing Direction and Guidance Comprised of a notable and representative group of 13 faculty, staff, students and community leaders, our board of directors...",
+        "og:url": "https://calpolypartners.org/governance/board-of-directors/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/11/cal-poly-partners-board-members-2025-scaled.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance/leadership",
+      "finalUrl": "http://localhost:3002/governance/leadership",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Leadership - Cal Poly Partners",
+        "description": "Executive Staff Grounded in more than 80 years of supporting the university, Cal Poly Partners’ leadership bring a diverse background of experiences, schooling,...",
+        "og:title": "Leadership - Cal Poly Partners",
+        "og:description": "Executive Staff Grounded in more than 80 years of supporting the university, Cal Poly Partners’ leadership bring a diverse background of experiences, schooling,...",
+        "og:url": "https://calpolypartners.org/governance/leadership/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/ribbon-cutting-speech-cal-poly-cheerleaders-event.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance/meeting-agendas-minutes",
+      "finalUrl": "http://localhost:3002/governance/meeting-agendas-minutes",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Meeting Agendas & Minutes - Cal Poly Partners",
+        "description": "Board of Directors Discussion and Action Items Cal Poly Partners is governed by a 13-member Board of Directors that meets quarterly to discuss direction and set...",
+        "og:title": "Meeting Agendas & Minutes - Cal Poly Partners",
+        "og:description": "Board of Directors Discussion and Action Items Cal Poly Partners is governed by a 13-member Board of Directors that meets quarterly to discuss direction and set...",
+        "og:url": "https://calpolypartners.org/governance/meeting-agendas-minutes/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/aerial-view-cal-poly-campus-san-luis-obispo-hills.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance/financials",
+      "finalUrl": "http://localhost:3002/governance/financials",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Financials - Cal Poly Partners",
+        "description": "Revenue Sources and Financial Reports Cal Poly Partners’ revenue comes from a diverse range of sources, including Campus Dining, Mustang Shop, commercial...",
+        "og:title": "Financials - Cal Poly Partners",
+        "og:description": "Revenue Sources and Financial Reports Cal Poly Partners’ revenue comes from a diverse range of sources, including Campus Dining, Mustang Shop, commercial...",
+        "og:url": "https://calpolypartners.org/governance/financials/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/warren-baker-science-math-building-cal-poly-campus.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/governance/policies-bylaws",
+      "finalUrl": "http://localhost:3002/governance/policies-bylaws",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Policies & Bylaws - Cal Poly Partners",
+        "description": "The Laws That Govern Us Articles of Incorporation This document establishes Cal Poly Partners’ as a separate entity. Articles of Incorporation – Restated and...",
+        "og:title": "Policies & Bylaws - Cal Poly Partners",
+        "og:description": "The Laws That Govern Us Articles of Incorporation This document establishes Cal Poly Partners’ as a separate entity. Articles of Incorporation – Restated and...",
+        "og:url": "https://calpolypartners.org/governance/policies-bylaws/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/library-bookshelves-student-academic-resource-center.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/history",
+      "finalUrl": "http://localhost:3002/history",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "History - Cal Poly Partners",
+        "description": "Celebrating 85 Years of Partnership Since 1941, Cal Poly Partners has proudly supported Cal Poly’s mission and students. Our partnership began during World War...",
+        "og:title": "History - Cal Poly Partners",
+        "og:description": "Celebrating 85 Years of Partnership Since 1941, Cal Poly Partners has proudly supported Cal Poly’s mission and students. Our partnership began during World War...",
+        "og:url": "https://calpolypartners.org/history/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/vintage-dining-hall-black-and-white-photo-historic-campus.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/news",
+      "finalUrl": "http://localhost:3002/news",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "News - Cal Poly Partners",
+        "description": "Cal Poly Partners is dedicated to advancing Cal Poly’s mission. We push boundaries to provide the university with resources and services in support of programs...",
+        "og:title": "News - Cal Poly Partners",
+        "og:description": "Cal Poly Partners is dedicated to advancing Cal Poly’s mission. We push boundaries to provide the university with resources and services in support of programs...",
+        "og:url": "https://calpolypartners.org/news/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/cal-poly-student-selfie-with-mascot-campus-event.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/commercial-services",
+      "finalUrl": "http://localhost:3002/commercial-services",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Commercial Services - Cal Poly Partners",
+        "description": "From Catering to Courseware and Everything in Between We provide vital commercial services, including healthful food options, affordable textbooks, convenient...",
+        "og:title": "Commercial Services - Cal Poly Partners",
+        "og:description": "From Catering to Courseware and Everything in Between We provide vital commercial services, including healthful food options, affordable textbooks, convenient...",
+        "og:url": "https://calpolypartners.org/commercial-services/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/mustang-shop-grand-opening-ribbon-cutting-cal-poly.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/business-services",
+      "finalUrl": "http://localhost:3002/business-services",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Business Services - Cal Poly Partners",
+        "description": "In Support of Learn by Doing From grant administration and research support to communications help and administrative services, we provide the backing, funding,...",
+        "og:title": "Business Services - Cal Poly Partners",
+        "og:description": "In Support of Learn by Doing From grant administration and research support to communications help and administrative services, we provide the backing, funding,...",
+        "og:url": "https://calpolypartners.org/business-services/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/field-survey-worker-green-hard-hat-forest-measuring.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/business-services/economic-development",
+      "finalUrl": "http://localhost:3002/business-services/economic-development",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Economic Development - Cal Poly Partners",
+        "description": "Engaging Regional Leadership Economic Development plays a significant role in engaging with regional leadership to address opportunities in our area. It...",
+        "og:title": "Economic Development - Cal Poly Partners",
+        "og:description": "Engaging Regional Leadership Economic Development plays a significant role in engaging with regional leadership to address opportunities in our area. It...",
+        "og:url": "https://calpolypartners.org/business-services/economic-development/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/people-walking-industrial-ocean-pier-daylight.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development",
+      "finalUrl": "http://localhost:3002/real-estate-development",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Real Estate Development - Cal Poly Partners",
+        "description": "Real Estate Development and Services Cal Poly Partners manages, leases and owns property enabling Cal Poly’s Learn By Doing instruction. It also offers and...",
+        "og:title": "Real Estate Development - Cal Poly Partners",
+        "og:description": "Real Estate Development and Services Cal Poly Partners manages, leases and owns property enabling Cal Poly’s Learn By Doing instruction. It also offers and...",
+        "og:url": "https://calpolypartners.org/real-estate-development/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/townhomes-mountain-view-residential-community-evening-light.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development/faculty-staff-housing",
+      "finalUrl": "http://localhost:3002/real-estate-development/faculty-staff-housing",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Faculty & Staff Housing - Cal Poly Partners",
+        "description": "Expanding Housing Opportunities Access to attainable housing remains a significant challenge in recruiting and retaining Cal Poly faculty and staff. Studies...",
+        "og:title": "Faculty & Staff Housing - Cal Poly Partners",
+        "og:description": "Expanding Housing Opportunities Access to attainable housing remains a significant challenge in recruiting and retaining Cal Poly faculty and staff. Studies...",
+        "og:url": "https://calpolypartners.org/real-estate-development/faculty-staff-housing/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/faculty-staff-housing-site-plan-map-community-layout.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development/faculty-staff-housing/harvest-lofts",
+      "finalUrl": "http://localhost:3002/real-estate-development/faculty-staff-housing/harvest-lofts",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Harvest Lofts - Cal Poly Partners",
+        "description": "Convenient Living for Cal Poly Faculty & Staff Now Leasing The newly constructed Harvest Lofts offer an ideal location for Cal Poly faculty and staff, just 4...",
+        "og:title": "Harvest Lofts - Cal Poly Partners",
+        "og:description": "Convenient Living for Cal Poly Faculty & Staff Now Leasing The newly constructed Harvest Lofts offer an ideal location for Cal Poly faculty and staff, just 4...",
+        "og:url": "https://calpolypartners.org/real-estate-development/faculty-staff-housing/harvest-lofts/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/harvest-lofts-modern-apartment-rendering-exterior.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development/faculty-staff-housing/vista-meadows",
+      "finalUrl": "http://localhost:3002/real-estate-development/faculty-staff-housing/vista-meadows",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Vista Meadows - Cal Poly Partners",
+        "description": "Faculty and Staff Housing Vista Meadows, the new faculty and staff housing project being developed at the Slack Street and Grand Avenue entrance to campus, will...",
+        "og:title": "Vista Meadows - Cal Poly Partners",
+        "og:description": "Faculty and Staff Housing Vista Meadows, the new faculty and staff housing project being developed at the Slack Street and Grand Avenue entrance to campus, will...",
+        "og:url": "https://calpolypartners.org/real-estate-development/faculty-staff-housing/vista-meadows/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/modern-suburban-neighborhood-henderson-street-rendering.png"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development/capital-projects",
+      "finalUrl": "http://localhost:3002/real-estate-development/capital-projects",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Capital Projects - Cal Poly Partners",
+        "description": "Our Current Projects Over a 10-year period Cal Poly Partners will spend in excess of $100 million to create a better student experience with improvements to...",
+        "og:title": "Capital Projects - Cal Poly Partners",
+        "og:description": "Our Current Projects Over a 10-year period Cal Poly Partners will spend in excess of $100 million to create a better student experience with improvements to...",
+        "og:url": "https://calpolypartners.org/real-estate-development/capital-projects/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/construction-site-walkthrough-hard-hats-safety-vests-structural-frame.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/real-estate-development/technology-park",
+      "finalUrl": "http://localhost:3002/real-estate-development/technology-park",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Technology Park - Cal Poly Partners",
+        "description": "Aligning Student Success with Workforce Development Needs For more than a decade, the Cal Poly Technology Park has been a beacon of success, fostering the...",
+        "og:title": "Technology Park - Cal Poly Partners",
+        "og:description": "Aligning Student Success with Workforce Development Needs For more than a decade, the Cal Poly Technology Park has been a beacon of success, fostering the...",
+        "og:url": "https://calpolypartners.org/real-estate-development/technology-park/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/modern-green-campus-building-rendering-technology-park.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/careers",
+      "finalUrl": "http://localhost:3002/careers",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Careers - Cal Poly Partners",
+        "description": "Work in a Place Ranked Among the Best Cal Poly Partners employees have the unique opportunity to make a difference in the lives of students, faculty and staff...",
+        "og:title": "Careers - Cal Poly Partners",
+        "og:description": "Work in a Place Ranked Among the Best Cal Poly Partners employees have the unique opportunity to make a difference in the lives of students, faculty and staff...",
+        "og:url": "https://calpolypartners.org/careers/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2024/01/careers.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/contact",
+      "finalUrl": "http://localhost:3002/contact",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Contact - Cal Poly Partners",
+        "description": "Cal Poly Partners Staff Mailing Address 1 Grand Ave., Building 112 San Luis Obispo, CA 93407 General Inquiries (805) 756-1451 Email Address...",
+        "og:title": "Contact - Cal Poly Partners",
+        "og:description": "Cal Poly Partners Staff Mailing Address 1 Grand Ave., Building 112 San Luis Obispo, CA 93407 General Inquiries (805) 756-1451 Email Address...",
+        "og:url": "https://calpolypartners.org/contact/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2025/07/students-evening-food-truck-dining-outdoor-event.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-store-in-new-location-in-downtown-san-luis-obispo",
+      "finalUrl": "http://localhost:3002/cal-poly-store-in-new-location-in-downtown-san-luis-obispo",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly store in new location in downtown San Luis Obispo - Cal Poly Partners",
+        "description": "The Cal Poly Mustang store has moved from its location on the corner of Garden Street to 1144 Chorro Street in downtown San Luis Obispo that&#8217;s been vacant...",
+        "og:title": "Cal Poly store in new location in downtown San Luis Obispo - Cal Poly Partners",
+        "og:description": "The Cal Poly Mustang store has moved from its location on the corner of Garden Street to 1144 Chorro Street in downtown San Luis Obispo that&#8217;s been vacant...",
+        "og:url": "https://calpolypartners.org/cal-poly-store-in-new-location-in-downtown-san-luis-obispo/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/06/KSBYPictureofNewDowntownLocation.png"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/students-learn-how-to-build-their-own-charcuterie-boards-at-cal-poly-campus-dining-event",
+      "finalUrl": "http://localhost:3002/students-learn-how-to-build-their-own-charcuterie-boards-at-cal-poly-campus-dining-event",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Students learn how to build their own charcuterie boards at Cal Poly Campus Dining event - Cal Poly Partners",
+        "description": "Students at California Polytechnic State University (Cal Poly) in San Luis Obispo, California enjoyed making their own charcuterie boards at a Charcuterie...",
+        "og:title": "Students learn how to build their own charcuterie boards at Cal Poly Campus Dining event - Cal Poly Partners",
+        "og:description": "Students at California Polytechnic State University (Cal Poly) in San Luis Obispo, California enjoyed making their own charcuterie boards at a Charcuterie...",
+        "og:url": "https://calpolypartners.org/students-learn-how-to-build-their-own-charcuterie-boards-at-cal-poly-campus-dining-event/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/06/Cal_Poly_Charcuterie_Class.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/new-cal-poly-store-just-opened-on-a-prime-corner-in-downtown-slo-see-inside",
+      "finalUrl": "http://localhost:3002/new-cal-poly-store-just-opened-on-a-prime-corner-in-downtown-slo-see-inside",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "New Cal Poly store just opened on a prime corner in downtown SLO. See inside - Cal Poly Partners",
+        "description": "Cal Poly’s new San Luis Obispo shop is finally up and running — this time on an even more visible downtown corner. After nearly two years of development and...",
+        "og:title": "New Cal Poly store just opened on a prime corner in downtown SLO. See inside - Cal Poly Partners",
+        "og:description": "Cal Poly’s new San Luis Obispo shop is finally up and running — this time on an even more visible downtown corner. After nearly two years of development and...",
+        "og:url": "https://calpolypartners.org/new-cal-poly-store-just-opened-on-a-prime-corner-in-downtown-slo-see-inside/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/06/SLO_CalPolystore29849.jpeg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-polys-vista-meadows-project-aims-to-solve-faculty-housing-shortage",
+      "finalUrl": "http://localhost:3002/cal-polys-vista-meadows-project-aims-to-solve-faculty-housing-shortage",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly’s Vista Meadows project aims to solve faculty housing shortage - Cal Poly Partners",
+        "description": "Cal Poly officials say the construction of the Vista Meadows staff housing project, built for faculty and staff and located near the Grand Avenue entrance to...",
+        "og:title": "Cal Poly’s Vista Meadows project aims to solve faculty housing shortage - Cal Poly Partners",
+        "og:description": "Cal Poly officials say the construction of the Vista Meadows staff housing project, built for faculty and staff and located near the Grand Avenue entrance to...",
+        "og:url": "https://calpolypartners.org/cal-polys-vista-meadows-project-aims-to-solve-faculty-housing-shortage/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/05/vista-meadows-floor-plan-2.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-downtown-store-moves-to-new-location-after-decade-on-higuera-street",
+      "finalUrl": "http://localhost:3002/cal-poly-downtown-store-moves-to-new-location-after-decade-on-higuera-street",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly Downtown Store moves to new location after decade on Higuera Street - Cal Poly Partners",
+        "description": "The Cal Poly Downtown Store has relocated to a new, larger space at the corner of Chorro and Marsh streets, ending nearly a decade at its former Higuera Street...",
+        "og:title": "Cal Poly Downtown Store moves to new location after decade on Higuera Street - Cal Poly Partners",
+        "og:description": "The Cal Poly Downtown Store has relocated to a new, larger space at the corner of Chorro and Marsh streets, ending nearly a decade at its former Higuera Street...",
+        "og:url": "https://calpolypartners.org/cal-poly-downtown-store-moves-to-new-location-after-decade-on-higuera-street/",
+        "og:image": "https://calpolypartners.org/static/banner.jpeg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/tropical-fruit-desserts-with-the-zip-zap-zing",
+      "finalUrl": "http://localhost:3002/tropical-fruit-desserts-with-the-zip-zap-zing",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Tropical fruit desserts with the ‘zip, zap, zing!’ - Cal Poly Partners",
+        "description": "This is an excerpt from a larger article originally published by FoodService Director. Retail Executive Chef Jeremy Jones of Cal Poly Campus Dining in San Luis...",
+        "og:title": "Tropical fruit desserts with the ‘zip, zap, zing!’ - Cal Poly Partners",
+        "og:description": "This is an excerpt from a larger article originally published by FoodService Director. Retail Executive Chef Jeremy Jones of Cal Poly Campus Dining in San Luis...",
+        "og:url": "https://calpolypartners.org/tropical-fruit-desserts-with-the-zip-zap-zing/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/04/TheHealthShackAcaiBerry.webp"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-alums-soap-refill-machines-aim-to-cut-plastic-bottle-waste-heres-how",
+      "finalUrl": "http://localhost:3002/cal-poly-alums-soap-refill-machines-aim-to-cut-plastic-bottle-waste-heres-how",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly alums’ soap refill machines aim to cut plastic bottle waste. Here’s how - Cal Poly Partners",
+        "description": "A Cal Poly alumni-founded company aimed at reducing plastic waste from everyday household cleaning items is growing in San Luis Obispo County and beyond. Mr....",
+        "og:title": "Cal Poly alums’ soap refill machines aim to cut plastic bottle waste. Here’s how - Cal Poly Partners",
+        "og:description": "A Cal Poly alumni-founded company aimed at reducing plastic waste from everyday household cleaning items is growing in San Luis Obispo County and beyond. Mr....",
+        "og:url": "https://calpolypartners.org/cal-poly-alums-soap-refill-machines-aim-to-cut-plastic-bottle-waste-heres-how/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/04/Mr.trutle.jpeg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-polys-chef-arthur-dulin-wins-at-nacufs-pacific-competition",
+      "finalUrl": "http://localhost:3002/cal-polys-chef-arthur-dulin-wins-at-nacufs-pacific-competition",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly’s Chef Arthur Dulin wins at NACUFS Pacific competition - Cal Poly Partners",
+        "description": "Chef Arthur Dulin has found that he thrives under pressure. He won on the Food Network show Chopped, and he got his start at a busy sports bar and grill as a...",
+        "og:title": "Cal Poly’s Chef Arthur Dulin wins at NACUFS Pacific competition - Cal Poly Partners",
+        "og:description": "Chef Arthur Dulin has found that he thrives under pressure. He won on the Food Network show Chopped, and he got his start at a busy sports bar and grill as a...",
+        "og:url": "https://calpolypartners.org/cal-polys-chef-arthur-dulin-wins-at-nacufs-pacific-competition/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/04/chefarthur.webp"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-chef-to-compete-in-regional-culinary-challenge",
+      "finalUrl": "http://localhost:3002/cal-poly-chef-to-compete-in-regional-culinary-challenge",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly chef to compete in regional culinary challenge - Cal Poly Partners",
+        "description": "When Arthur Dulin spent three weeks traveling in Thailand, he noticed the unique combination of seafood and Thai food, particularly the popular dish of catfish...",
+        "og:title": "Cal Poly chef to compete in regional culinary challenge - Cal Poly Partners",
+        "og:description": "When Arthur Dulin spent three weeks traveling in Thailand, he noticed the unique combination of seafood and Thai food, particularly the popular dish of catfish...",
+        "og:url": "https://calpolypartners.org/cal-poly-chef-to-compete-in-regional-culinary-challenge/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2026/03/Arthur.webp"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-partners-recognized-as-a-family-friendly-workplace",
+      "finalUrl": "http://localhost:3002/cal-poly-partners-recognized-as-a-family-friendly-workplace",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly Partners Recognized as a Family Friendly Workplace - Cal Poly Partners",
+        "description": "Supporting Student Success",
+        "og:title": "Cal Poly Partners Recognized as a Family Friendly Workplace - Cal Poly Partners",
+        "og:description": "Supporting Student Success",
+        "og:url": "https://calpolypartners.org/cal-poly-partners-recognized-as-a-family-friendly-workplace/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2024/01/1301-CPC-Cal-Poly-Partners-Internet-HR-Award_54.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    },
+    {
+      "url": "/cal-poly-partners-recognized-as-a-family-friendly-workplace",
+      "finalUrl": "http://localhost:3002/cal-poly-partners-recognized-as-a-family-friendly-workplace",
+      "status": 200,
+      "indexable": true,
+      "skippedReason": null,
+      "robots": "",
+      "metadata": {
+        "title": "Cal Poly Partners Recognized as a Family Friendly Workplace - Cal Poly Partners",
+        "description": "Supporting Student Success",
+        "og:title": "Cal Poly Partners Recognized as a Family Friendly Workplace - Cal Poly Partners",
+        "og:description": "Supporting Student Success",
+        "og:url": "https://calpolypartners.org/cal-poly-partners-recognized-as-a-family-friendly-workplace/",
+        "og:image": "https://cms.calpolypartners.org/wp-content/uploads/2024/01/1301-CPC-Cal-Poly-Partners-Internet-HR-Award_54.jpg"
+      },
+      "missing": [],
+      "statusResult": "pass"
+    }
+  ]
+}

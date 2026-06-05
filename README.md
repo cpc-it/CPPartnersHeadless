@@ -101,6 +101,8 @@ The development server uses `faust dev`.
 
 - `npm run dev`
   - starts the local Faust/Next development server
+- `npm run dev:checks`
+  - runs the current browser-level checks against `BASE_URL` without starting the dev server
 - `npm run start`
   - starts the built production server via `faust start`
 
@@ -110,6 +112,8 @@ The development server uses `faust dev`.
   - production build via `faust build`
 - `npm run wpe-build`
   - same as `npm run build`; likely intended for WP Engine/Atlas build environments
+- `npm run test:browser-checks:ci`
+  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci` and `test:metadata-audit:ci`) for deploy or pull request gating
 - `npm run generate`
   - regenerates `possibleTypes.json`
 
@@ -121,12 +125,97 @@ The development server uses `faust dev`.
   - runs the headless desktop/mobile navigation smoke suite against `BASE_URL` (defaults to `http://localhost:3002`)
 - `npm run test:nav-smoke:ci`
   - same smoke suite with an explicit CI-safe `BASE_URL` fallback
+- `npm run test:metadata-audit`
+  - crawls internal links starting from the home page, validates required metadata on indexable pages, writes a JSON report to `artifacts/metadata-audit.json`, and fails on missing fields
+- `npm run test:metadata-audit:ci`
+  - same metadata audit with an explicit CI-safe `BASE_URL` fallback
 - `npm run format`
   - runs Prettier write mode across JS/JSX/Markdown/CSS/SCSS files
 - `npm run format:check`
   - runs Prettier check mode
 - `npm run clean`
   - deletes `.next` and `node_modules`
+
+## Metadata audit
+
+Run the crawler locally or in CI:
+
+```bash
+npm run test:metadata-audit
+```
+
+The audit uses Playwright to open the home page at `BASE_URL`, follows same-origin links it discovers, and validates rendered metadata on each crawled page. A page is treated as non-indexable and skipped from required-field validation when it renders `meta[name="robots"]` containing `noindex`.
+
+Required metadata on indexable pages:
+
+- `title`
+- `meta[name="description"]`
+- `meta[property="og:title"]`
+- `meta[property="og:description"]`
+- `meta[property="og:url"]`
+- `meta[property="og:image"]`
+
+Outputs:
+
+- JSON report written to `artifacts/metadata-audit.json` by default
+- the same JSON emitted on stdout for CI log capture or piping
+- summary lines emitted on stderr
+
+Options:
+
+- set `BASE_URL` to target a different environment
+- set `METADATA_AUDIT_REPORT` to change the default report file path
+- pass `--report path/to/report.json` to override the output file for a single run
+- set `METADATA_AUDIT_MAX_PAGES` to cap crawl size (default `500`)
+
+Exit behavior:
+
+- exits `0` when every crawled indexable page has all required fields and there are no crawl errors
+- exits nonzero when any indexable page is missing required metadata or when the crawler cannot load a page
+
+## Browser checks in CI
+
+Browser-level checks are best used as deploy or pull request gates instead of slowing down every local dev startup.
+
+Use these commands locally when you want the same checks on demand:
+
+- `npm run dev:checks`
+- `npm run test:browser-checks:ci`
+
+The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs both browser checks, and uploads the metadata audit report plus the app log when failures occur.
+
+Report shape example:
+
+```json
+{
+  "baseUrl": "http://localhost:3002/",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "requiredFields": [
+    "title",
+    "description",
+    "og:title",
+    "og:description",
+    "og:url",
+    "og:image"
+  ],
+  "totals": {
+    "crawled": 42,
+    "indexable": 39,
+    "passing": 37,
+    "failing": 2,
+    "skipped": 3,
+    "crawlErrors": 0
+  },
+  "failures": [
+    {
+      "url": "/example-page",
+      "missing": ["og:image"]
+    }
+  ],
+  "crawlErrors": [],
+  "pages": []
+}
+```
 
 ## Verified command status in this workspace
 
