@@ -2,6 +2,26 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getPublicSiteOrigin } from '../../utilities/normalizeInternalLink';
 
+const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.jpeg';
+
+function toAbsoluteUrl(url) {
+  if (!url) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
+
+  if (url.startsWith('//')) {
+    return `https:${url}`;
+  }
+
+  const origin = getPublicSiteOrigin();
+
+  return url.startsWith('/') ? `${origin}${url}` : `${origin}/${url}`;
+}
+
 /**
  * Provide SEO related meta tags to a page.
  *
@@ -23,11 +43,15 @@ export default function SEO({
   noindex = false,
 }) {
   const router = useRouter();
+  const fallbackImageUrl = noindex
+    ? undefined
+    : `${getPublicSiteOrigin()}${DEFAULT_SOCIAL_IMAGE_PATH}`;
+  const effectiveImageUrl = toAbsoluteUrl(imageUrl) || fallbackImageUrl;
 
   // Use the explicit url prop when provided; otherwise derive from current path for indexable pages.
   const effectiveUrl = url || (!noindex ? `${getPublicSiteOrigin()}${router.asPath}` : undefined);
 
-  if (!title && !description && !keywords && !imageUrl && !effectiveUrl && !noindex) {
+  if (!title && !description && !keywords && !effectiveImageUrl && !effectiveUrl && !noindex) {
     return null;
   }
 
@@ -58,10 +82,10 @@ export default function SEO({
 
         {keywords && <meta name="keywords" content={keywords} />}
 
-        {imageUrl && (
+        {effectiveImageUrl && (
           <>
-            <meta property="og:image" content={imageUrl} />
-            <meta property="twitter:image" content={imageUrl} />
+            <meta property="og:image" content={effectiveImageUrl} />
+            <meta property="twitter:image" content={effectiveImageUrl} />
           </>
         )}
 
