@@ -1,11 +1,14 @@
 @import 'styles/Variables';
 
 $nav-collapse-breakpoint: 1212px;
+$nav-motion-duration: 280ms;
+$nav-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
 .header {
   color: var(--color-white);
   background: #f8f8f7;
-  transition: background-color 0.4s ease-in-out, transform 0.4s ease-in-out;
+  transition: background-color $nav-motion-duration $nav-motion-ease,
+    transform $nav-motion-duration $nav-motion-ease;
   position: fixed;
   top: 0;
   width: 100%;
@@ -18,7 +21,8 @@ $nav-collapse-breakpoint: 1212px;
 }
 
 .logo-wrap {
-  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  transition: transform $nav-motion-duration $nav-motion-ease,
+    opacity $nav-motion-duration $nav-motion-ease;
   padding: 1rem 0;
   background: var(--color-primary);
 
@@ -30,7 +34,7 @@ $nav-collapse-breakpoint: 1212px;
 }
 
 .header-content {
-  transition: transform 0.4s ease-in-out;
+  transition: transform $nav-motion-duration $nav-motion-ease;
 
   @media screen and (max-width: 767px) {
     background: rgba(248, 248, 247, 0.96);
@@ -69,7 +73,8 @@ $nav-collapse-breakpoint: 1212px;
   font-size: clamp(2rem, 3vw, 3.2rem);
   display: inline-block;
   text-decoration-color: #bd8b13;
-  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+  transition: color $nav-motion-duration $nav-motion-ease,
+    text-decoration-color $nav-motion-duration $nav-motion-ease;
 
   &:hover {
     text-decoration: underline;
@@ -110,8 +115,9 @@ $nav-collapse-breakpoint: 1212px;
   background: rgba(255, 255, 255, 0.72);
   position: relative;
   z-index: 1;
-  transition: transform 0.2s ease, background-color 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform $nav-motion-duration $nav-motion-ease,
+    background-color $nav-motion-duration $nav-motion-ease,
+    border-color $nav-motion-duration $nav-motion-ease;
 
   &:hover,
   &:focus-visible {
@@ -143,7 +149,9 @@ $nav-collapse-breakpoint: 1212px;
   position: relative;
   z-index: 2;
   line-height: 1;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform $nav-motion-duration $nav-motion-ease,
+    box-shadow $nav-motion-duration $nav-motion-ease,
+    border-color $nav-motion-duration $nav-motion-ease;
 
   &:hover,
   &:focus-visible {
@@ -177,7 +185,7 @@ $nav-collapse-breakpoint: 1212px;
   background: rgba(15, 23, 42, 0.28);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity $nav-motion-duration $nav-motion-ease;
 
   &.show {
     opacity: 1;
@@ -230,7 +238,9 @@ $nav-collapse-breakpoint: 1212px;
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
-    transition: transform 0.28s ease, opacity 0.28s ease, visibility 0.28s ease;
+    transition: transform $nav-motion-duration $nav-motion-ease,
+      opacity $nav-motion-duration $nav-motion-ease,
+      visibility 0s linear $nav-motion-duration;
     overflow-y: auto;
     z-index: 10000000;
   }
@@ -304,7 +314,8 @@ $nav-collapse-breakpoint: 1212px;
     color: var(--color-primary);
     font-weight: $font-weight-bold;
     text-decoration: none;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    transition: color $nav-motion-duration $nav-motion-ease,
+      opacity $nav-motion-duration $nav-motion-ease;
   }
 
   :global(.menu > li > .menu-link-row > a) {
@@ -339,7 +350,12 @@ $nav-collapse-breakpoint: 1212px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.8);
     color: #bd8b13;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform $nav-motion-duration $nav-motion-ease,
+      border-color $nav-motion-duration $nav-motion-ease;
+
+    svg {
+      transition: transform $nav-motion-duration $nav-motion-ease;
+    }
 
     &:hover,
     &:focus-visible {
@@ -389,7 +405,8 @@ $nav-collapse-breakpoint: 1212px;
       opacity: 0;
       visibility: hidden;
       transform: translateY(6px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity $nav-motion-duration $nav-motion-ease,
+        transform $nav-motion-duration $nav-motion-ease;
       pointer-events: none;
       z-index: 1000;
     }
@@ -471,8 +488,9 @@ $nav-collapse-breakpoint: 1212px;
       overflow: hidden;
       opacity: 0;
       padding-bottom: 0;
-      transition: max-height 0.28s ease, opacity 0.2s ease,
-        padding-bottom 0.2s ease;
+      transition: max-height $nav-motion-duration $nav-motion-ease,
+        opacity $nav-motion-duration $nav-motion-ease,
+        padding-bottom $nav-motion-duration $nav-motion-ease;
     }
 
     :global(li.expanded > ul) {
