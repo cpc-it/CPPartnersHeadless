@@ -113,7 +113,7 @@ The development server uses `faust dev`.
 - `npm run wpe-build`
   - same as `npm run build`; likely intended for WP Engine/Atlas build environments
 - `npm run test:browser-checks:ci`
-  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci` and `test:metadata-audit:ci`) for deploy or pull request gating
+  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci`, `test:button-state-smoke:ci`, and `test:metadata-audit:ci`) for deploy or pull request gating
 - `npm run generate`
   - regenerates `possibleTypes.json`
 
@@ -129,6 +129,10 @@ The development server uses `faust dev`.
   - crawls internal links starting from the home page, validates required metadata on indexable pages, writes a JSON report to `artifacts/metadata-audit.json`, and fails on missing fields
 - `npm run test:metadata-audit:ci`
   - same metadata audit with an explicit CI-safe `BASE_URL` fallback
+- `npm run test:button-state-smoke`
+  - runs Playwright-based UI checks for shared primary button states on `/search` and `/404` after entering a query that yields a visible `Load more` button
+- `npm run test:button-state-smoke:ci`
+  - same button-state suite with an explicit CI-safe `BASE_URL` fallback
 - `npm run format`
   - runs Prettier write mode across JS/JSX/Markdown/CSS/SCSS files
 - `npm run format:check`
@@ -241,7 +245,66 @@ Use these commands locally when you want the same checks on demand:
 - `npm run dev:checks`
 - `npm run test:browser-checks:ci`
 
-The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs both browser checks, and uploads the metadata audit report plus the app log when failures occur.
+The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs the browser checks suite, and uploads the metadata audit report plus the app log when failures occur.
+
+## Button state smoke checks
+
+Run locally:
+
+```bash
+npm run test:button-state-smoke
+```
+
+Or against a different environment:
+
+```bash
+BASE_URL=https://your-env.example npm run test:button-state-smoke:ci
+```
+
+What it verifies:
+
+- route coverage: `/search` and `/404`
+- `Load more` button default, hover, focus-visible, active/mousedown, and disabled visual states
+- computed CSS values for color/background/border and focus outline
+- keyboard activation behavior (`Enter` and `Space`) while focused on the button
+
+Stability notes:
+
+- no fixed sleep timing is used for state discovery
+- each route searches with multiple query candidates until `Load more` appears
+- waits rely on element presence/focus/click events and computed-style reads
+
+Sample passing output:
+
+```text
+> npm run test:button-state-smoke
+
+> @faustjs/atlas-blueprint-portfolio@0.2.0 test:button-state-smoke
+> node scripts/button-state-smoke.mjs
+
+[button-smoke] [route:/search] [step:load-search-results] load more button appeared for query "a"
+[button-smoke] [route:/404] [step:load-search-results] load more button appeared for query "a"
+{
+  "baseUrl": "http://localhost:3002",
+  "routes": ["/search", "/404"],
+  "routeResults": [
+    {
+      "route": "/search",
+      "searchTerm": "a",
+      "keyboardActivation": { "clickCount": 2 },
+      "passed": true
+    },
+    {
+      "route": "/404",
+      "searchTerm": "a",
+      "keyboardActivation": { "clickCount": 2 },
+      "passed": true
+    }
+  ],
+  "passed": true
+}
+PASS button state smoke checks
+```
 
 Report shape example:
 
