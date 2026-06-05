@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { getPublicSiteOrigin } from '../../utilities/normalizeInternalLink';
 
 /**
  * Provide SEO related meta tags to a page.
@@ -8,7 +10,7 @@ import Head from 'next/head';
  * @param {string} props.description Used for the meta description, og:description, twitter:description, etc.
  * @param {string} props.keywords Used for the keywords meta tag.
  * @param {string} props.imageUrl Used for the og:image and twitter:image.
- * @param {string} props.url Used for the og:url and twitter:url.
+ * @param {string} props.url Used for the og:url and twitter:url. When omitted, derived from the current path and site base URL.
  *
  * @returns {React.ReactElement} The SEO component
  */
@@ -20,7 +22,12 @@ export default function SEO({
   url,
   noindex = false,
 }) {
-  if (!title && !description && !keywords && !imageUrl && !url && !noindex) {
+  const router = useRouter();
+
+  // Use the explicit url prop when provided; otherwise derive from current path for indexable pages.
+  const effectiveUrl = url || (!noindex ? `${getPublicSiteOrigin()}${router.asPath}` : undefined);
+
+  if (!title && !description && !keywords && !imageUrl && !effectiveUrl && !noindex) {
     return null;
   }
 
@@ -58,10 +65,10 @@ export default function SEO({
           </>
         )}
 
-        {url && (
+        {effectiveUrl && (
           <>
-            <meta property="og:url" content={url} />
-            <meta property="twitter:url" content={url} />
+            <meta property="og:url" content={effectiveUrl} />
+            <meta property="twitter:url" content={effectiveUrl} />
           </>
         )}
       </Head>

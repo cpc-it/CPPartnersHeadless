@@ -1,7 +1,7 @@
 const DEFAULT_PUBLIC_SITE_ORIGIN = 'https://calpolypartners.org';
 const BACKEND_HOSTS = ['hesj5f3wy23f0l5rw0mrh6jsg.js.wpenginepowered.com'];
 
-function getPublicSiteOrigin() {
+export function getPublicSiteOrigin() {
   return process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_PUBLIC_SITE_ORIGIN;
 }
 
