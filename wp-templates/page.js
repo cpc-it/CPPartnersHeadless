@@ -115,7 +115,7 @@ export default function Component(props) {
             <ContactFormIntoSlot />
             {slug === 'news' && (
               <div className="posts-listing-news-page">
-                <Posts posts={recentPosts} />
+                <Posts posts={recentPosts} titleLevel="h2" />
                 <LoadMore
                   className="text-center"
                   hasNextPage={newsPostsConnection?.pageInfo?.hasNextPage}

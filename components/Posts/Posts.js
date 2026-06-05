@@ -15,9 +15,10 @@ let cx = classNames.bind(styles);
  * @param {Post[]} props.posts The array of post items.
  * @param {string} props.id The unique id for this component.
  * @param {string} props.intro Message to show as an introduction text.
+ * @param {h1|h2|h3|h4|h5|h6} props.titleLevel Heading level for each post title.
  * @returns {React.ReactElement} The Projects component
  */
-function Posts({ posts, intro, id }) {
+function Posts({ posts, intro, id, titleLevel = 'h2' }) {
   const { firstNewResultRef, firstNewResultIndex } =
     useFocusFirstNewResult(posts);
 
@@ -62,7 +63,7 @@ function Posts({ posts, intro, id }) {
                   </a>
                 </Link>
 
-                <Heading level="h4" className={cx('header')}>
+                <Heading level={titleLevel} className={cx('header')}>
                   <Link legacyBehavior href={post?.uri ?? '#'}>
                     <a ref={isFirstNewResult ? firstNewResultRef : null}>
                       {post.title}

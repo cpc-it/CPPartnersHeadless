@@ -108,7 +108,7 @@ export default function Component() {
             <Heading className={styles.heading} level="h2">
               News
             </Heading>
-            <Posts posts={homepagePosts} id="posts-list" />
+            <Posts posts={homepagePosts} id="posts-list" titleLevel="h3" />
           </section>
 
         </div>

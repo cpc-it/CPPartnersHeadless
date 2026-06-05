@@ -64,7 +64,7 @@ export default function Page() {
       <Main>
         <EntryHeader title="Latest Posts" />
         <div className="container">
-          <Posts posts={postList} id="post-list" />
+          <Posts posts={postList} id="post-list" titleLevel="h2" />
           <LoadMore
             className="text-center"
             hasNextPage={data?.posts?.pageInfo?.hasNextPage}

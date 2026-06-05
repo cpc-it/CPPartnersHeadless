@@ -66,7 +66,7 @@ export default function Archive(props) {
         <>
           <EntryHeader title={archiveTitle} />
           <div className="container">
-            <Posts posts={postList} />
+            <Posts posts={postList} titleLevel="h2" />
             <LoadMore
               className="text-center"
               hasNextPage={data.nodeByUri?.contentNodes?.pageInfo.hasNextPage}
