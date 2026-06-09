@@ -84,6 +84,8 @@ export default function Page() {
         description={searchDescription || siteDescription}
         keywords={searchKeywords}
         url={searchUrl}
+        siteName={siteTitle}
+        schemaType="SearchResultsPage"
       />
 
       <Header

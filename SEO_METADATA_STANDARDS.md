@@ -23,6 +23,10 @@ Always emitted by `SEO` component regardless of page type:
 
 - `meta[property="og:type"]` = `website`
 - `meta[property="twitter:card"]` = `summary_large_image`
+- `script[type="application/ld+json"]` with baseline schema graph:
+  - `Organization`
+  - `WebSite` (with `SearchAction`)
+  - page entity (`WebPage` by default or template-specific subtype such as `SearchResultsPage` / `CollectionPage`)
 
 Conditional tags:
 

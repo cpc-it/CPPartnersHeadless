@@ -94,6 +94,8 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={postUrl}
+        siteName={siteTitle}
+        schemaType="WebPage"
       />
       <Header
         title={siteTitle}

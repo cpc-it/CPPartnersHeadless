@@ -66,6 +66,8 @@ export default function Component() {
         description={homeDescription || siteDescription}
         keywords={homeKeywords}
         url={homeUrl}
+        siteName={siteTitle}
+        schemaType="WebPage"
       />
 
       <Header

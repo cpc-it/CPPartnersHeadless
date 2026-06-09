@@ -57,6 +57,8 @@ export default function Page() {
         description={description}
         keywords={keywords}
         url={postsUrl}
+        siteName={siteTitle}
+        schemaType="CollectionPage"
       />
 
       <Header menuItems={primaryMenu} />

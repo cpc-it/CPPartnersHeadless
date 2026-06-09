@@ -57,6 +57,8 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={projectUrl}
+        siteName={siteTitle}
+        schemaType="WebPage"
       />
 
       <Header menuItems={primaryMenu} />

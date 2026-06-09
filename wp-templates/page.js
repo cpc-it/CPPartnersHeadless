@@ -78,6 +78,7 @@ export default function Component(props) {
   const pageUrl = normalizeInternalLink(uri || (slug ? `/${slug}/` : '/'), {
     absolute: true,
   });
+  const schemaType = slug === 'news' ? 'CollectionPage' : 'WebPage';
 
   // Replace the marker with a stable placeholder DIV for SSR
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
@@ -99,6 +100,8 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={pageUrl}
+        siteName={siteTitle}
+        schemaType={schemaType}
         noindex={noindex}
       />
       <Header

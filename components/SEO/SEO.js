@@ -7,6 +7,110 @@ import {
 } from '../../utilities/normalizeInternalLink';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.jpeg';
+const DEFAULT_ORGANIZATION_NAME = 'Cal Poly Partners';
+
+function compactSchemaValue(value) {
+  if (Array.isArray(value)) {
+    return value
+      .map(compactSchemaValue)
+      .filter((item) => item !== undefined);
+  }
+
+  if (value && typeof value === 'object') {
+    const cleanedObject = Object.entries(value).reduce((acc, [key, nestedValue]) => {
+      const cleanedValue = compactSchemaValue(nestedValue);
+
+      if (
+        cleanedValue === undefined ||
+        (Array.isArray(cleanedValue) && cleanedValue.length === 0)
+      ) {
+        return acc;
+      }
+
+      acc[key] = cleanedValue;
+      return acc;
+    }, {});
+
+    return Object.keys(cleanedObject).length > 0 ? cleanedObject : undefined;
+  }
+
+  if (value === undefined || value === null || value === '') {
+    return undefined;
+  }
+
+  return value;
+}
+
+function serializeJsonLd(payload) {
+  return JSON.stringify(payload)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+}
+
+function buildSchemaGraph({
+  schemaType,
+  siteName,
+  title,
+  description,
+  effectiveUrl,
+  effectiveImageUrl,
+}) {
+  const origin = getPublicSiteOrigin();
+  const organizationName = siteName || DEFAULT_ORGANIZATION_NAME;
+  const organizationId = `${origin}/#organization`;
+  const websiteId = `${origin}/#website`;
+  const webpageId = `${(effectiveUrl || origin).replace(/\/$/, '')}/#webpage`;
+
+  const schemaPayload = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': organizationId,
+        name: organizationName,
+        url: origin,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        url: origin,
+        name: organizationName,
+        publisher: {
+          '@id': organizationId,
+        },
+        inLanguage: 'en-US',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${origin}/search/?search={search_term_string}`,
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': schemaType,
+        '@id': webpageId,
+        url: effectiveUrl,
+        name: title || organizationName,
+        description,
+        isPartOf: {
+          '@id': websiteId,
+        },
+        about: {
+          '@id': organizationId,
+        },
+        inLanguage: 'en-US',
+        primaryImageOfPage: effectiveImageUrl
+          ? {
+              '@type': 'ImageObject',
+              url: effectiveImageUrl,
+            }
+          : undefined,
+      },
+    ],
+  };
+
+  return compactSchemaValue(schemaPayload);
+}
 
 function toAbsoluteUrl(url) {
   if (!url) {
@@ -35,6 +139,8 @@ function toAbsoluteUrl(url) {
  * @param {string} props.keywords Used for the keywords meta tag.
  * @param {string} props.imageUrl Used for the og:image and twitter:image.
  * @param {string} props.url Used for the og:url and twitter:url. When omitted, derived from the current path and site base URL.
+ * @param {string} props.siteName Used for Organization and WebSite schema names.
+ * @param {string} props.schemaType Used for the current page schema type.
  *
  * @returns {React.ReactElement} The SEO component
  */
@@ -44,6 +150,8 @@ export default function SEO({
   keywords,
   imageUrl,
   url,
+  siteName,
+  schemaType = 'WebPage',
   noindex = false,
 }) {
   const router = useRouter();
@@ -54,6 +162,16 @@ export default function SEO({
 
   // Use the explicit url prop when provided; otherwise derive from current path for indexable pages.
   const effectiveUrl = normalizeMetadataUrl(url || (!noindex ? router.asPath : undefined));
+  const schemaGraph = !noindex
+    ? buildSchemaGraph({
+        schemaType,
+        siteName,
+        title,
+        description,
+        effectiveUrl,
+        effectiveImageUrl,
+      })
+    : undefined;
 
   if (!title && !description && !keywords && !effectiveImageUrl && !effectiveUrl && !noindex) {
     return null;
@@ -99,6 +217,15 @@ export default function SEO({
             <meta property="og:url" content={effectiveUrl} />
             <meta property="twitter:url" content={effectiveUrl} />
           </>
+        )}
+
+        {schemaGraph && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: serializeJsonLd(schemaGraph),
+            }}
+          />
         )}
       </Head>
     </>
