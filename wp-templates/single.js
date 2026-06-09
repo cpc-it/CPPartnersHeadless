@@ -209,6 +209,7 @@ export default function Component(props) {
                     height={675}
                     alt={featuredImage.node.altText || title}
                     sizes="(max-width: 900px) 100vw, 840px"
+                    priority
                     style={{ width: '100%', height: 'auto' }}
                   />
                   {featuredImage?.node?.caption && (

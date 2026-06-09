@@ -26,7 +26,6 @@ export default function HomepageCampusLife() {
             alt="Students sitting under umbrellas at outdoor tables near a colorful mural on a sunny campus patio."
             sizes="(max-width: 768px) 70vw, (max-width: 1200px) 50vw, 30vw"
             style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-            priority={false}
             quality={70}
           />
         </figure>
