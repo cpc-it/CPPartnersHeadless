@@ -22,7 +22,7 @@ export default function HomepageFoodInsecurity() {
             </div>
             <figure className="wp-block-media-text__media">
               <Image
-                src="/home/glean-slo-volunteers-harvesting-oranges-food-rescue-program.jpg"
+                src="/home/glean-slo-volunteers-harvesting-oranges-food-rescue-program.webp"
                 width={980}
                 height={630}
                 alt="Group of GleanSLO volunteers standing in a citrus orchard behind bins filled with freshly harvested oranges, smiling and holding a banner for the food rescue program."

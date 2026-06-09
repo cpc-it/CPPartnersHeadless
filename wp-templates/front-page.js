@@ -55,7 +55,7 @@ export default function Component() {
   const homeUrl = normalizeInternalLink('/', { absolute: true });
 
   const mainBanner = {
-    sourceUrl: '/static/banner.jpeg',
+    sourceUrl: '/static/banner.webp',
     mediaDetails: { width: 1200, height: 600 },
     altText: 'Portfolio Banner',
   };

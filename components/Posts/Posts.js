@@ -33,7 +33,7 @@ function Posts({ posts, intro, id, titleLevel = 'h2' }) {
 
           if (!image && appConfig.archiveDisplayFeaturedImage) {
             image = {
-              sourceUrl: '/static/banner.jpeg',
+              sourceUrl: '/static/banner.webp',
               altText: 'Downtown Austin, Texas skyline',
             };
           }

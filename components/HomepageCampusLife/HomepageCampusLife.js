@@ -20,7 +20,7 @@ export default function HomepageCampusLife() {
         </div>
         <figure className="wp-block-media-text__media">
           <Image
-            src="/home/students-eating-outdoors-campus-mural-patio-area.jpg"
+            src="/home/students-eating-outdoors-campus-mural-patio-area.webp"
             width={980}
             height={630}
             alt="Students sitting under umbrellas at outdoor tables near a colorful mural on a sunny campus patio."

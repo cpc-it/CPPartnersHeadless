@@ -21,7 +21,7 @@ export default function HomepageNonprofit() {
         </div>
         <figure className="wp-block-media-text__media">
           <Image
-            src="/home/cal-poly-students-packaging-chocolate-production-lab.jpg"
+            src="/home/cal-poly-students-packaging-chocolate-production-lab.webp"
             width={980}
             height={630}
             alt="Cal Poly students in hairnets and gloves packaging chocolate bars on trays in a food production lab."

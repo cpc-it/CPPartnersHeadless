@@ -21,7 +21,7 @@ export default function HomepageAttainableHousing() {
         </div>
         <figure className="wp-block-media-text__media">
           <Image
-            src="/home/affordable-housing-community-san-luis-obispo-mountain-view.jpg"
+            src="/home/affordable-housing-community-san-luis-obispo-mountain-view.webp"
             width={980}
             height={630}
             alt="Affordable housing development in San Luis Obispo with a scenic view of a mountain in the background."

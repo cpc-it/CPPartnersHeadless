@@ -6,7 +6,7 @@ import {
   normalizeMetadataUrl,
 } from '../../utilities/normalizeInternalLink';
 
-const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.jpeg';
+const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.webp';
 const DEFAULT_ORGANIZATION_NAME = 'Cal Poly Partners';
 
 function compactSchemaValue(value) {
