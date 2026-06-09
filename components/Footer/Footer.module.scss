@@ -23,7 +23,7 @@
 
   h3 {
     color: var(--color-lime);
-    font-family: 'Abolition','Source Sans Pro',Helvetica,Arial,Lucida,sans-serif;
+    font-family: $font-family-abolition;
   }
 
   .footer-nav-contact-info {
@@ -43,7 +43,7 @@
       .cppText {
         padding: 2rem 0 .75rem 0;
         border-top: 1px solid rgba(255, 255, 255, 0.5);
-        font-family: "utopia-std-display", serif;
+        font-family: $font-family-serif-display;
         font-weight: 500;
         font-size: 2.75rem;
       }
@@ -57,7 +57,7 @@
         margin-bottom: .75rem;
         line-height: 1;
         font-size: 2rem;
-        font-family: "utopia-std-display", serif;
+        font-family: $font-family-serif-display;
       }
     }
 
@@ -126,12 +126,12 @@
 
 
 .nav-one, .nav-two {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: $font-family;
     margin-top: 2rem;
 }
 
 .logo-address {
-  font-family: "utopia-std-subhead", serif;
+  font-family: $font-family-serif-subhead;
   font-weight: 300;
   display: flex;
   justify-content: space-between;

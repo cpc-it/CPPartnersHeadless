@@ -68,7 +68,7 @@ $nav-drawer-duration: 120ms;
 
 .titleName {
   color: #154734;
-  font-family: 'utopia-std-display', serif;
+  font-family: $font-family-serif-display;
   text-transform: capitalize;
   letter-spacing: 0;
   font-size: clamp(2rem, 3vw, 3.2rem);

@@ -1,4 +1,8 @@
-$font-family: 'Source Sans Pro',Helvetica,Arial,Lucida,sans-serif;
+$font-family-sans: 'Source Sans Pro', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Lucida, sans-serif;
+$font-family-serif-display: 'utopia-std-display', Georgia, 'Times New Roman', Times, serif;
+$font-family-serif-subhead: 'utopia-std-subhead', Georgia, 'Times New Roman', Times, serif;
+$font-family-abolition: 'Abolition', 'Source Sans Pro', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Lucida, sans-serif;
+$font-family: $font-family-sans;
 $font-weight-normal: 300;
 $font-weight-bold: 700;
 $font-weight-extra-bold: 900;

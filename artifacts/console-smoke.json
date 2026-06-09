@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-06-09T20:53:03.386Z",
+  "baseUrl": "http://localhost:3000",
+  "targetUrl": "http://localhost:3000/",
+  "route": "/",
+  "failOnWarnings": false,
+  "configPath": null,
+  "settleMs": 1200,
+  "warningAllowlist": [],
+  "totals": {
+    "errors": 0,
+    "warnings": 0,
+    "unmatchedWarnings": 0,
+    "allowlistedWarnings": 0
+  },
+  "errors": [],
+  "warnings": [],
+  "passed": true
+}

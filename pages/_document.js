@@ -13,10 +13,21 @@ export default function Document() {
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
 
         {typekitStylesheets.map((href) => (
-          <link key={`${href}-preload`} rel="preload" as="style" href={href} />
+          <link
+            key={`${href}-preload`}
+            rel="preload"
+            as="style"
+            href={href}
+            crossOrigin="anonymous"
+          />
         ))}
         {typekitStylesheets.map((href) => (
-          <link key={`${href}-stylesheet`} rel="stylesheet" href={href} />
+          <link
+            key={`${href}-stylesheet`}
+            rel="stylesheet"
+            href={href}
+            crossOrigin="anonymous"
+          />
         ))}
       </Head>
       <body>
