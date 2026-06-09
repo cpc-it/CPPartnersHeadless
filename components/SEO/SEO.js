@@ -48,6 +48,23 @@ function serializeJsonLd(payload) {
     .replace(/&/g, '\\u0026');
 }
 
+function buildBreadcrumbSchema({ effectiveUrl, breadcrumbs }) {
+  if (!effectiveUrl || !Array.isArray(breadcrumbs) || breadcrumbs.length < 2) {
+    return undefined;
+  }
+
+  return {
+    '@type': 'BreadcrumbList',
+    '@id': `${effectiveUrl.replace(/\/$/, '')}/#breadcrumb`,
+    itemListElement: breadcrumbs.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
 function buildSchemaGraph({
   schemaType,
   siteName,
@@ -55,6 +72,8 @@ function buildSchemaGraph({
   description,
   effectiveUrl,
   effectiveImageUrl,
+  breadcrumbs,
+  additionalSchemaEntities,
 }) {
   const origin = getPublicSiteOrigin();
   const organizationName = siteName || DEFAULT_ORGANIZATION_NAME;
@@ -62,51 +81,62 @@ function buildSchemaGraph({
   const websiteId = `${origin}/#website`;
   const webpageId = `${(effectiveUrl || origin).replace(/\/$/, '')}/#webpage`;
 
+  const baseGraph = [
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: organizationName,
+      url: origin,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: origin,
+      name: organizationName,
+      publisher: {
+        '@id': organizationId,
+      },
+      inLanguage: 'en-US',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${origin}/search/?search={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': schemaType,
+      '@id': webpageId,
+      url: effectiveUrl,
+      name: title || organizationName,
+      description,
+      isPartOf: {
+        '@id': websiteId,
+      },
+      about: {
+        '@id': organizationId,
+      },
+      inLanguage: 'en-US',
+      primaryImageOfPage: effectiveImageUrl
+        ? {
+            '@type': 'ImageObject',
+            url: effectiveImageUrl,
+          }
+        : undefined,
+    },
+  ];
+  const extraEntities = Array.isArray(additionalSchemaEntities)
+    ? additionalSchemaEntities
+    : additionalSchemaEntities
+    ? [additionalSchemaEntities]
+    : [];
+  const breadcrumbSchema = buildBreadcrumbSchema({
+    effectiveUrl,
+    breadcrumbs,
+  });
+
   const schemaPayload = {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': organizationId,
-        name: organizationName,
-        url: origin,
-      },
-      {
-        '@type': 'WebSite',
-        '@id': websiteId,
-        url: origin,
-        name: organizationName,
-        publisher: {
-          '@id': organizationId,
-        },
-        inLanguage: 'en-US',
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: `${origin}/search/?search={search_term_string}`,
-          'query-input': 'required name=search_term_string',
-        },
-      },
-      {
-        '@type': schemaType,
-        '@id': webpageId,
-        url: effectiveUrl,
-        name: title || organizationName,
-        description,
-        isPartOf: {
-          '@id': websiteId,
-        },
-        about: {
-          '@id': organizationId,
-        },
-        inLanguage: 'en-US',
-        primaryImageOfPage: effectiveImageUrl
-          ? {
-              '@type': 'ImageObject',
-              url: effectiveImageUrl,
-            }
-          : undefined,
-      },
-    ],
+    '@graph': [...baseGraph, breadcrumbSchema, ...extraEntities],
   };
 
   return compactSchemaValue(schemaPayload);
@@ -139,8 +169,10 @@ function toAbsoluteUrl(url) {
  * @param {string} props.keywords Used for the keywords meta tag.
  * @param {string} props.imageUrl Used for the og:image and twitter:image.
  * @param {string} props.url Used for the og:url and twitter:url. When omitted, derived from the current path and site base URL.
+ * @param {object[]} props.breadcrumbs Breadcrumb trail used to emit BreadcrumbList schema.
  * @param {string} props.siteName Used for Organization and WebSite schema names.
  * @param {string} props.schemaType Used for the current page schema type.
+ * @param {object|object[]} props.additionalSchemaEntities Additional schema.org entities appended to the JSON-LD graph.
  *
  * @returns {React.ReactElement} The SEO component
  */
@@ -150,8 +182,10 @@ export default function SEO({
   keywords,
   imageUrl,
   url,
+  breadcrumbs,
   siteName,
   schemaType = 'WebPage',
+  additionalSchemaEntities,
   noindex = false,
 }) {
   const router = useRouter();
@@ -170,6 +204,8 @@ export default function SEO({
         description,
         effectiveUrl,
         effectiveImageUrl,
+        breadcrumbs,
+        additionalSchemaEntities,
       })
     : undefined;
 

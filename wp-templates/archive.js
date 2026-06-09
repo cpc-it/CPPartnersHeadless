@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import appConfig from 'app.config';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -48,6 +49,10 @@ export default function Archive(props) {
     seedKeywords: [name, 'archive', 'cal poly partners', 'conference planning'],
   });
   const archiveUrl = normalizeInternalLink(uri || '/', { absolute: true });
+  const breadcrumbs = buildBreadcrumbs({
+    url: archiveUrl,
+    title: archiveTitle,
+  });
 
   return (
     <>
@@ -56,6 +61,7 @@ export default function Archive(props) {
         description={archiveDescription || siteDescription}
         keywords={archiveKeywords}
         url={archiveUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType="CollectionPage"
       />

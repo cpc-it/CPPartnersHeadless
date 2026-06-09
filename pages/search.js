@@ -19,6 +19,7 @@ import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -76,6 +77,10 @@ export default function Page() {
     seedKeywords: ['search', 'site search', 'cal poly partners'],
   });
   const searchUrl = normalizeInternalLink('/search/', { absolute: true });
+  const breadcrumbs = buildBreadcrumbs({
+    url: searchUrl,
+    title: 'Search',
+  });
 
   return (
     <>
@@ -84,6 +89,7 @@ export default function Page() {
         description={searchDescription || siteDescription}
         keywords={searchKeywords}
         url={searchUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType="SearchResultsPage"
       />

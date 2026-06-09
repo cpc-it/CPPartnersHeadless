@@ -14,6 +14,7 @@ import {
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -49,6 +50,14 @@ export default function Component(props) {
   const projectUrl = normalizeInternalLink(props?.data?.project?.uri || '/projects/', {
     absolute: true,
   });
+  const breadcrumbs = buildBreadcrumbs({
+    url: projectUrl,
+    title,
+    trail: [{
+      name: 'Projects',
+      url: normalizeInternalLink('/projects/', { absolute: true }),
+    }],
+  });
   return (
     <>
       <SEO
@@ -57,6 +66,7 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={projectUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType="WebPage"
       />

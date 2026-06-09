@@ -13,6 +13,7 @@ import {
 } from 'components';
 import Image from 'next/image';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -59,6 +60,47 @@ export default function Component(props) {
     ],
   });
   const postUrl = normalizeInternalLink(uri || '/posts/', { absolute: true });
+  const siteOrigin = new URL(postUrl).origin;
+  const publishedAt = postsFields?.datePublished || date;
+  const normalizedPublishedAt = Number.isNaN(Date.parse(publishedAt))
+    ? undefined
+    : new Date(publishedAt).toISOString();
+  const articleAuthorName = postsFields?.author || wpAuthor?.node?.name || 'Cal Poly Partners';
+  const breadcrumbs = buildBreadcrumbs({
+    url: postUrl,
+    title,
+    trail: [{
+      name: 'News',
+      url: normalizeInternalLink('/news/', { absolute: true }),
+    }],
+  });
+  const blogPostingSchema = {
+    '@type': 'BlogPosting',
+    '@id': `${postUrl.replace(/\/$/, '')}/#blogposting`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${postUrl.replace(/\/$/, '')}/#webpage`,
+    },
+    headline: title,
+    description,
+    image: featuredImage?.node?.sourceUrl,
+    datePublished: normalizedPublishedAt,
+    dateModified: normalizedPublishedAt,
+    author: {
+      '@type': 'Person',
+      name: articleAuthorName,
+      url: siteOrigin,
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${siteOrigin}/#organization`,
+      name: siteTitle,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteOrigin}/logo.png`,
+      },
+    },
+  };
 
   // 🔹 Date formatter
   function formatDate(dateString) {
@@ -94,8 +136,10 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={postUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType="WebPage"
+        additionalSchemaEntities={blogPostingSchema}
       />
       <Header
         title={siteTitle}

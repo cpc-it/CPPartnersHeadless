@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -79,6 +80,10 @@ export default function Component(props) {
     absolute: true,
   });
   const schemaType = slug === 'news' ? 'CollectionPage' : 'WebPage';
+  const breadcrumbs = buildBreadcrumbs({
+    url: pageUrl,
+    title,
+  });
 
   // Replace the marker with a stable placeholder DIV for SSR
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
@@ -100,6 +105,7 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={pageUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType={schemaType}
         noindex={noindex}

@@ -15,6 +15,7 @@ import {
 } from 'components';
 import { getNextStaticProps } from '@faustwp/core';
 import {
+  buildBreadcrumbs,
   buildKeywordString,
   buildMetaDescription,
   normalizeInternalLink,
@@ -52,6 +53,10 @@ export default function Page() {
     seedKeywords: ['projects', 'portfolio', 'cal poly partners', 'event planning'],
   });
   const projectsUrl = normalizeInternalLink('/projects/', { absolute: true });
+  const breadcrumbs = buildBreadcrumbs({
+    url: projectsUrl,
+    title: 'Projects',
+  });
   return (
     <>
       <SEO
@@ -59,6 +64,7 @@ export default function Page() {
         description={description}
         keywords={keywords}
         url={projectsUrl}
+        breadcrumbs={breadcrumbs}
         siteName={siteTitle}
         schemaType="CollectionPage"
       />
