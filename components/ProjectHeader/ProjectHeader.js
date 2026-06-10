@@ -16,7 +16,7 @@ function ProjectHeader({ image, title, summary }) {
     <section className={cx('header')}>
       <div className="container">
         <div className="row row-center">
-          <FeaturedImage className={cx('column')} image={image} />
+          <FeaturedImage className={cx('column')} image={image} sourceSize="large" />
           <div className={cx('column')}>
             <Heading level="h2">{title}</Heading>
             <p>{summary}</p>

@@ -37,6 +37,7 @@ function Projects({ projects, id, emptyText = 'No projects found.' }) {
               <FeaturedImage
                 className={cx('image')}
                 image={project?.featuredImage?.node}
+                sourceSize="large"
                 priority={i < appConfig.projectsAboveTheFold}
               />
               <div className={cx('content')}>

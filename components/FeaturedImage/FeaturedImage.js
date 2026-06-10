@@ -12,13 +12,16 @@ export default function FeaturedImage({
   sizes,
   priority = false,
   quality,
+  sourceSize = 'full',
   ...props
 }) {
   const router = useRouter();
   const isHome = router.pathname === '/';
 
   let src;
-  if (image?.sourceUrl instanceof Function) {
+  if (sourceSize === 'large' && image?.sourceUrlLarge) {
+    src = image.sourceUrlLarge;
+  } else if (image?.sourceUrl instanceof Function) {
     src = image.sourceUrl();
   } else {
     src = image?.sourceUrl;
@@ -69,6 +72,7 @@ FeaturedImage.fragments = {
         node {
           id
           sourceUrl
+          sourceUrlLarge: sourceUrl(size: LARGE)
           altText
           caption
           mediaDetails {

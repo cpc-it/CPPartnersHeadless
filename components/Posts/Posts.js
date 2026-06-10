@@ -54,6 +54,7 @@ function Posts({ posts, intro, id, titleLevel = 'h2' }) {
                     <FeaturedImage
                       className={cx('image')}
                       image={image}
+                      sourceSize="large"
                       width={340}
                       height={340}
                       sizes="(max-width: 768px) 70vw, 340px"

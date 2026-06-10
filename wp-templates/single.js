@@ -204,7 +204,7 @@ export default function Component(props) {
                   }`}
                 >
                   <Image
-                    src={featuredImage.node.sourceUrl}
+                    src={featuredImage.node.sourceUrlLarge || featuredImage.node.sourceUrl}
                     width={1200}
                     height={675}
                     alt={featuredImage.node.altText || title}
