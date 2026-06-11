@@ -286,14 +286,16 @@ export default function Header({ className, menuItems }) {
             </button>
           </div>
 
-          <button
-            type="button"
-            className={cx('nav-backdrop', { show: isNavShown })}
-            aria-label="Dismiss navigation overlay"
-            tabIndex={isNavShown ? 0 : -1}
-            onClick={closeNavigation}
-            style={isNavShown ? { top: `${backdropTopOffset}px` } : undefined}
-          />
+          {isNavShown ? (
+            <button
+              type="button"
+              className={cx('nav-backdrop', { show: isNavShown })}
+              aria-label="Dismiss navigation overlay"
+              tabIndex={0}
+              onClick={closeNavigation}
+              style={{ top: `${backdropTopOffset}px` }}
+            />
+          ) : null}
 
           <NavigationMenu
             id="primary-navigation"

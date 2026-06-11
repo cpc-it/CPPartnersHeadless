@@ -26,6 +26,18 @@ $nav-drawer-duration: 120ms;
     opacity $nav-motion-duration $nav-motion-ease;
   padding: 1rem 0;
   background: var(--color-primary);
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 1211px) {
+    pointer-events: none;
+
+    .logo,
+    .logo a,
+    .logo img {
+      pointer-events: auto;
+    }
+  }
 
   &.scrolled {
     transform: translateY(-20px);
@@ -36,6 +48,8 @@ $nav-drawer-duration: 120ms;
 
 .header-content {
   transition: transform $nav-motion-duration $nav-motion-ease;
+  position: relative;
+  z-index: 2;
 
   @media screen and (max-width: 767px) {
     background: rgba(248, 248, 247, 0.96);
@@ -55,6 +69,7 @@ $nav-drawer-duration: 120ms;
   gap: 1rem 1.5rem;
   padding: 1.1rem 0;
   position: relative;
+  z-index: 3;
 
   @media (min-width: $nav-collapse-breakpoint) {
     flex-wrap: nowrap;
@@ -95,6 +110,7 @@ $nav-drawer-duration: 120ms;
   margin-left: auto;
   position: relative;
   z-index: 10000002;
+  pointer-events: auto;
 
   @media (min-width: $nav-collapse-breakpoint) {
     order: 3;
@@ -116,6 +132,7 @@ $nav-drawer-duration: 120ms;
   background: rgba(255, 255, 255, 0.72);
   position: relative;
   z-index: 1;
+  pointer-events: auto;
   transition: transform $nav-motion-duration $nav-motion-ease,
     background-color $nav-motion-duration $nav-motion-ease,
     border-color $nav-motion-duration $nav-motion-ease;
@@ -149,6 +166,7 @@ $nav-drawer-duration: 120ms;
   color: var(--color-primary);
   position: relative;
   z-index: 2;
+  pointer-events: auto;
   line-height: 1;
   transition: transform $nav-motion-duration $nav-motion-ease,
     box-shadow $nav-motion-duration $nav-motion-ease,
