@@ -263,7 +263,7 @@ export default function Header({ className, menuItems }) {
             Cal Poly Partners
           </Link>
 
-          <div className={cx('header-actions')}>
+          <div className={cx('header-actions', { 'menu-open': isNavShown })}>
             <Link legacyBehavior href="/search">
               <a
                 className={cx('search-link')}

@@ -117,6 +117,20 @@ $nav-drawer-duration: 120ms;
     margin-left: 1rem;
     flex: 0 0 auto;
   }
+
+  &.menu-open {
+    @media (max-width: 1211px) {
+      position: fixed;
+      top: calc(0.75rem + env(safe-area-inset-top, 0px));
+      right: calc(1rem + env(safe-area-inset-right, 0px));
+      margin-left: 0;
+      z-index: 10000003;
+      padding: 0.3rem;
+      border-radius: 999px;
+      // background: rgba(248, 248, 247, 0.92);
+      backdrop-filter: blur(8px);
+    }
+  }
 }
 
 .search-link {
@@ -225,7 +239,7 @@ $nav-drawer-duration: 120ms;
     right: 0;
     width: min(88vw, 380px);
     height: 100vh;
-    padding: 6.5rem 1.5rem 2rem;
+    padding: calc(7.75rem + env(safe-area-inset-top, 0px)) 1.5rem 2rem;
     background: linear-gradient(
         180deg,
         rgba(228, 236, 232, 0.94) 0%,
