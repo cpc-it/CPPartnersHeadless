@@ -1,6 +1,7 @@
 import * as MENUS from 'constants/menus';
 
 import { useQuery, gql } from '@apollo/client';
+import dynamic from 'next/dynamic';
 import styles from 'styles/pages/_Home.module.scss';
 import {
   EntryHeader,
@@ -9,40 +10,42 @@ import {
   NavigationMenu,
   SEO,
   Header,
-  Footer,
   Posts,
   Testimonials,
-  HomepageCampusLife,
   HomepageIntro,
   HomepageNonprofit,
-  HomepageTicker,
-  HomepageAdvancing,
-  HomepageAttainableHousing,
-  HomepageEmpowering,
-  HomepageFoodInsecurity,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import { buildKeywordString, normalizeInternalLink } from 'utilities';
 
+const HomepageTicker = dynamic(() => import('components/HomepageTicker/HomepageTicker'));
+const HomepageCampusLife = dynamic(() => import('components/HomepageCampusLife/HomepageCampusLife'));
+const HomepageAdvancing = dynamic(() => import('components/HomepageAdvancing/HomepageAdvancing'));
+const HomepageAttainableHousing = dynamic(() =>
+  import('components/HomepageAttainableHousing/HomepageAttainableHousing')
+);
+const HomepageEmpowering = dynamic(() => import('components/HomepageEmpowering/HomepageEmpowering'));
+const HomepageFoodInsecurity = dynamic(() =>
+  import('components/HomepageFoodInsecurity/HomepageFoodInsecurity')
+);
+const Footer = dynamic(() => import('components/Footer/Footer'));
+
 const postsPerPage = 4;
 
 export default function Component() {
-  const { data, loading } = useQuery(Component.query, {
+  const { data } = useQuery(Component.query, {
     variables: Component.variables(),
   });
-  if (loading) {
-    return null;
-  }
-
   const { title: siteTitle, description: siteDescription } =
-    data?.generalSettings;
+    data?.generalSettings ?? {};
   const primaryMenu = data?.headerMenuItems?.nodes ?? [];
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
   const homepagePosts = (data?.posts?.nodes ?? []).slice(0, postsPerPage);
+  const homeTitle = siteTitle || 'Cal Poly Partners';
   const homeDescription =
     'Cal Poly Partners supports conferences, events, dining, housing, staffing, and campus experiences with end-to-end planning and on-site coordination.';
   const homeKeywords = buildKeywordString({
-    title: siteTitle,
+    title: homeTitle,
     content: `${homeDescription} Explore event support, testimonials, nonprofit services, campus life programs, attainable housing initiatives, and recent news.`,
     seedKeywords: [
       'cal poly partners',
@@ -62,16 +65,16 @@ export default function Component() {
   return (
     <>
       <SEO
-        title={siteTitle}
+        title={homeTitle}
         description={homeDescription || siteDescription}
         keywords={homeKeywords}
         url={homeUrl}
-        siteName={siteTitle}
+        siteName={homeTitle}
         schemaType="WebPage"
       />
 
       <Header
-        title={siteTitle}
+        title={homeTitle}
         description={siteDescription}
         menuItems={primaryMenu}
       />
@@ -118,7 +121,7 @@ export default function Component() {
       </Main>
 
       <Footer
-        title={siteTitle}
+        title={homeTitle}
         menuItems={footerMenu}
         navOneMenuItems={data?.footerSecondaryMenuItems?.nodes ?? []}
         navTwoMenuItems={data?.footerTertiaryMenuItems?.nodes ?? []}

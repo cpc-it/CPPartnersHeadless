@@ -39,17 +39,39 @@ export default function MyApp({ Component, pageProps }) {
 
   // Your parallax and link logic
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDesktop = window.innerWidth >= 1024;
+    const shouldRunParallax = isDesktop && !prefersReducedMotion;
+
+    let frameId = null;
+
     const handleScroll = () => {
-      const parallaxEls = document.querySelectorAll('.wp-block-image.parallax img');
-      parallaxEls.forEach((el) => {
-        const container = el.closest('.parallax');
-        if (!container) return;
-        const rect = container.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const progress = 1 - Math.min(Math.max(rect.top / windowHeight, 0), 1);
-        const maxOffset = 130;
-        const offset = Math.max(Math.min((progress - 0.5) * 2 * maxOffset, maxOffset), -maxOffset);
-        el.style.transform = `translateY(${offset}px)`;
+      if (!shouldRunParallax) {
+        return;
+      }
+
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null;
+
+        const parallaxEls = document.querySelectorAll('.wp-block-image.parallax img');
+        parallaxEls.forEach((el) => {
+          const container = el.closest('.parallax');
+          if (!container) return;
+          const rect = container.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const progress = 1 - Math.min(Math.max(rect.top / windowHeight, 0), 1);
+          const maxOffset = 130;
+          const offset = Math.max(Math.min((progress - 0.5) * 2 * maxOffset, maxOffset), -maxOffset);
+          el.style.transform = `translateY(${offset}px)`;
+        });
       });
     };
 
@@ -86,17 +108,40 @@ export default function MyApp({ Component, pageProps }) {
       });
     };
 
-    const delayCheck = setTimeout(() => {
-      handleScroll();
-      checkStandaloneLinks();
-    }, 100);
+    const runDeferredWork = () => {
+      if (shouldRunParallax) {
+        handleScroll();
+      }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+      checkStandaloneLinks();
+    };
+
+    const idleCallbackId =
+      typeof window.requestIdleCallback === 'function'
+        ? window.requestIdleCallback(runDeferredWork)
+        : window.setTimeout(runDeferredWork, 250);
+
+    if (shouldRunParallax) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
     window.addEventListener('resize', checkStandaloneLinks);
 
     return () => {
-      clearTimeout(delayCheck);
-      window.removeEventListener('scroll', handleScroll);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      if (typeof window.cancelIdleCallback === 'function' && typeof idleCallbackId === 'number') {
+        window.cancelIdleCallback(idleCallbackId);
+      } else {
+        clearTimeout(idleCallbackId);
+      }
+
+      if (shouldRunParallax) {
+        window.removeEventListener('scroll', handleScroll);
+      }
+
       window.removeEventListener('resize', checkStandaloneLinks);
     };
   }, []);
@@ -105,12 +150,12 @@ export default function MyApp({ Component, pageProps }) {
     <>
       {/* ✅ Google Analytics scripts */}
       <Script
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
       />
       <Script
         id="gtag-init"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
