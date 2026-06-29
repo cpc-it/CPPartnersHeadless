@@ -510,7 +510,7 @@ $nav-drawer-duration: 120ms;
       pointer-events: none;
     }
 
-    :global(li.expanded > ul) {
+    :global(li > ul[aria-hidden='false']) {
       max-height: 1000px;
       opacity: 1;
       padding-bottom: 0.9rem;

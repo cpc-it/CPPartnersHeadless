@@ -83,6 +83,123 @@ async function getFirstSubmenuFocusTargets(page) {
   };
 }
 
+async function assertSubmenuA11yState(page, expectedExpanded, step) {
+  await page.waitForFunction(
+    (isExpanded) => {
+      const item = document.querySelector('nav#primary-navigation .menu > li.hasChildren');
+      if (!item) return false;
+
+      const submenu = item.querySelector(':scope > ul');
+      if (!submenu) return false;
+
+      const style = window.getComputedStyle(submenu);
+      const isRenderedOpen =
+        Number.parseFloat(style.opacity || '0') > 0.5 &&
+        style.pointerEvents !== 'none' &&
+        Number.parseFloat(style.maxHeight || '0') > 0;
+
+      return isExpanded ? isRenderedOpen : !isRenderedOpen;
+    },
+    expectedExpanded,
+    { timeout: 2000 }
+  );
+
+  const state = await page.evaluate(() => {
+    const item = document.querySelector('nav#primary-navigation .menu > li.hasChildren');
+    if (!item) {
+      return { found: false };
+    }
+
+    const toggle = item.querySelector(':scope > .menu-link-row > .submenu-toggle');
+    const submenu = item.querySelector(':scope > ul');
+    const firstDescendant = item.querySelector(
+      ':scope > ul > li > .menu-link-row > a, :scope > ul > li > .menu-link-row > .submenu-toggle'
+    );
+
+    if (!toggle || !submenu) {
+      return { found: false };
+    }
+
+    const submenuStyle = window.getComputedStyle(submenu);
+
+    return {
+      found: true,
+      ariaControls: toggle.getAttribute('aria-controls'),
+      submenuId: submenu.id,
+      ariaExpanded: toggle.getAttribute('aria-expanded'),
+      ariaHidden: submenu.getAttribute('aria-hidden'),
+      isRenderedOpen:
+        Number.parseFloat(submenuStyle.opacity || '0') > 0.5 &&
+        submenuStyle.pointerEvents !== 'none' &&
+        Number.parseFloat(submenuStyle.maxHeight || '0') > 0,
+      descendantTabIndex: firstDescendant?.getAttribute('tabindex') ?? null,
+    };
+  });
+
+  if (!state.found) {
+    failStep(step, 'could not find first submenu toggle and controlled submenu');
+  }
+
+  if (!state.ariaControls || state.ariaControls !== state.submenuId) {
+    failStep(step, 'submenu toggle aria-controls does not match controlled submenu id');
+  }
+
+  const expectedExpandedString = String(expectedExpanded);
+  const expectedHiddenString = String(!expectedExpanded);
+
+  if (state.ariaExpanded !== expectedExpandedString) {
+    failStep(
+      step,
+      `expected aria-expanded="${expectedExpandedString}", got "${state.ariaExpanded ?? 'null'}"`
+    );
+  }
+
+  if (state.ariaHidden !== expectedHiddenString) {
+    failStep(
+      step,
+      `expected controlled submenu aria-hidden="${expectedHiddenString}", got "${state.ariaHidden ?? 'null'}"`
+    );
+  }
+
+  if (state.isRenderedOpen !== expectedExpanded) {
+    failStep(
+      step,
+      `expected rendered submenu visibility ${expectedExpanded}, got ${state.isRenderedOpen}`
+    );
+  }
+
+  if (!expectedExpanded && state.descendantTabIndex !== '-1') {
+    failStep(step, 'expected collapsed submenu descendants to be removed from tab order');
+  }
+
+  if (expectedExpanded && state.descendantTabIndex === '-1') {
+    failStep(step, 'expected expanded submenu descendants to be reachable by keyboard');
+  }
+}
+
+async function toggleFirstSubmenuAndWait(page, expectedExpanded) {
+  await page.locator('nav#primary-navigation .menu > li.hasChildren > .menu-link-row > .submenu-toggle').first().click();
+
+  await page.waitForFunction(
+    (isExpanded) => {
+      const item = document.querySelector('nav#primary-navigation .menu > li.hasChildren');
+      if (!item) return false;
+
+      const toggle = item.querySelector(':scope > .menu-link-row > .submenu-toggle');
+      const submenu = item.querySelector(':scope > ul');
+
+      if (!toggle || !submenu) return false;
+
+      return (
+        toggle.getAttribute('aria-expanded') === String(isExpanded) &&
+        submenu.getAttribute('aria-hidden') === String(!isExpanded)
+      );
+    },
+    expectedExpanded,
+    { timeout: 3000 }
+  );
+}
+
 async function run() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -133,6 +250,13 @@ async function run() {
     // Tab-order regression for collapsed versus expanded submenu branches.
     await navToggle.click();
     await waitForExpandedState(page, true);
+
+    await assertSubmenuA11yState(page, false, 'submenu-a11y-before-open');
+    await toggleFirstSubmenuAndWait(page, true);
+    await assertSubmenuA11yState(page, true, 'submenu-a11y-after-open');
+    await toggleFirstSubmenuAndWait(page, false);
+    await assertSubmenuA11yState(page, false, 'submenu-a11y-after-close');
+    logStep('submenu-a11y-state', 'submenu attributes and rendered visibility stay synchronized across open/close');
 
     const submenuTargets = await getFirstSubmenuFocusTargets(page);
 

@@ -77,7 +77,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
           key={item.id ?? ''}
           className={[
             hasChildren ? 'hasChildren' : '',
-            isExpanded ? 'expanded' : '',
+            isSubmenuVisible ? 'expanded' : '',
             isDesktopHovered ? 'hover-open' : '',
           ]
             .filter(Boolean)
@@ -105,7 +105,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
               <button
                 type="button"
                 className="submenu-toggle"
-                aria-expanded={isExpanded}
+                aria-expanded={isSubmenuVisible}
                 aria-controls={submenuId}
                 aria-label={`Toggle ${item.label ?? 'submenu'} submenu`}
                 onClick={() => onToggleItem?.(item.id, descendantIds)}
