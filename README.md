@@ -102,7 +102,7 @@ The development server uses `faust dev`.
 - `npm run dev`
   - starts the local Faust/Next development server
 - `npm run dev:checks`
-  - runs the current browser-level checks against `BASE_URL` without starting the dev server
+  - runs the current browser-level checks against `BASE_URL` without starting the dev server, including keyboard navigation smoke checks
 - `npm run start`
   - starts the built production server via `faust start`
 
@@ -113,7 +113,7 @@ The development server uses `faust dev`.
 - `npm run wpe-build`
   - same as `npm run build`; likely intended for WP Engine/Atlas build environments
 - `npm run test:browser-checks:ci`
-  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci`, `test:button-state-smoke:ci`, `test:homepage-console-smoke:ci`, and `test:metadata-audit:ci`) for deploy or pull request gating
+  - runs the CI-safe browser-level checks bundle (`test:nav-smoke:ci`, `test:nav-focus-smoke:ci`, `test:keyboard-nav-smoke:ci`, `test:button-state-smoke:ci`, `test:homepage-console-smoke:ci`, and `test:metadata-audit:ci`) for deploy or pull request gating
 - `npm run generate`
   - regenerates `possibleTypes.json`
 
@@ -125,6 +125,14 @@ The development server uses `faust dev`.
   - runs the headless desktop/mobile navigation smoke suite against `BASE_URL` (defaults to `http://localhost:3002`)
 - `npm run test:nav-smoke:ci`
   - same smoke suite with an explicit CI-safe `BASE_URL` fallback
+- `npm run test:nav-focus-smoke`
+  - runs Playwright checks for navigation focus restoration, Escape close behavior, and submenu tab-order synchronization
+- `npm run test:nav-focus-smoke:ci`
+  - same navigation focus suite with an explicit CI-safe `BASE_URL` fallback
+- `npm run test:keyboard-nav-smoke`
+  - runs Playwright keyboard regression checks for skip link activation, header Tab/Enter/Escape behavior, and search input Enter handling
+- `npm run test:keyboard-nav-smoke:ci`
+  - same keyboard regression suite with an explicit CI-safe `BASE_URL` fallback
 - `npm run test:metadata-audit`
   - crawls internal links starting from the home page, validates required metadata on indexable pages, writes a JSON report to `artifacts/metadata-audit.json`, and fails on missing fields
 - `npm run test:metadata-audit:ci`
@@ -316,6 +324,18 @@ Use these commands locally when you want the same checks on demand:
 
 - `npm run dev:checks`
 - `npm run test:browser-checks:ci`
+
+## Manual keyboard smoke checklist
+
+Use this short checklist after navigation or search changes:
+
+- Press `Tab` once on the home page and verify the skip link appears and receives focus.
+- Press `Enter` on the skip link and verify focus lands on `#main-content`.
+- In a mobile viewport, focus the nav toggle and press `Enter`; verify the primary navigation opens.
+- With the mobile menu open, use `Tab` and verify focus reaches a focusable element inside primary navigation.
+- Focus a submenu toggle, press `Enter`, and verify the submenu expands.
+- With focus inside the open menu, press `Escape`; verify the menu closes and focus returns to the nav toggle.
+- On `/search`, type in the search input and press `Enter`; verify the route stays `/search` and the input value remains intact.
 
 The repository GitHub Actions workflow builds the app, starts it on `http://127.0.0.1:3002`, runs the browser checks suite, and uploads the metadata audit report, the homepage console smoke report, and the app log when failures occur.
 
