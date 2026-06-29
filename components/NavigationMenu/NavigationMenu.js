@@ -58,7 +58,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     return roots;
   };
 
-  const renderMenuItems = (items, depth = 0) => {
+  const renderMenuItems = (items, depth = 0, isBranchVisible = true) => {
     return items.map((item) => {
       const hasChildren = item.children?.length > 0;
       const isExpanded = expandedItems.includes(item.id);
@@ -69,6 +69,8 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
       const isExternalLink = /^(https?:|mailto:|tel:|\/\/)/i.test(href);
       const descendantIds = hasChildren ? getDescendantIds(item) : [];
+      const isSubmenuVisible = isBranchVisible && isExpanded;
+      const focusProps = isBranchVisible ? {} : { tabIndex: -1 };
 
       return (
         <li
@@ -91,11 +93,11 @@ const NavigationMenu = forwardRef(function NavigationMenu(
         >
           <div className="menu-link-row">
             {isExternalLink || target ? (
-              <a href={href} target={target} rel={rel} onClick={onNavigate}>
+              <a href={href} target={target} rel={rel} onClick={onNavigate} {...focusProps}>
                 {item.label ?? ''}
               </a>
             ) : (
-              <Link href={href} onClick={onNavigate}>
+              <Link href={href} onClick={onNavigate} {...focusProps}>
                 {item.label ?? ''}
               </Link>
             )}
@@ -107,14 +109,15 @@ const NavigationMenu = forwardRef(function NavigationMenu(
                 aria-controls={submenuId}
                 aria-label={`Toggle ${item.label ?? 'submenu'} submenu`}
                 onClick={() => onToggleItem?.(item.id, descendantIds)}
+                {...focusProps}
               >
                 <FaChevronDown aria-hidden="true" />
               </button>
             )}
           </div>
           {hasChildren && (
-            <ul id={submenuId} data-depth={depth + 1}>
-              {renderMenuItems(item.children, depth + 1)}
+            <ul id={submenuId} data-depth={depth + 1} aria-hidden={!isSubmenuVisible}>
+              {renderMenuItems(item.children, depth + 1, isSubmenuVisible)}
             </ul>
           )}
         </li>

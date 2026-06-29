@@ -23,6 +23,10 @@ async function waitForExpandedState(page, expected) {
   );
 }
 
+async function isElementFocused(locator) {
+  return locator.evaluate((element) => document.activeElement === element);
+}
+
 async function assertToggleFocused(page, step) {
   const isFocused = await page.evaluate(() => {
     const toggle = document.querySelector('button[aria-controls="primary-navigation"]');
@@ -62,6 +66,21 @@ async function focusFirstMenuLink(page, step) {
   if (!linkFocused) {
     failStep(step, 'could not focus a navigation link before closing');
   }
+}
+
+async function getFirstSubmenuFocusTargets(page) {
+  const submenuItem = page.locator('nav#primary-navigation .menu > li.hasChildren').first();
+
+  await submenuItem.waitFor({ state: 'visible', timeout: 3000 });
+
+  return {
+    item: submenuItem,
+    link: submenuItem.locator(':scope > .menu-link-row > a'),
+    toggle: submenuItem.locator(':scope > .menu-link-row > .submenu-toggle'),
+    firstDescendant: submenuItem
+      .locator(':scope > ul > li > .menu-link-row > a, :scope > ul > li > .menu-link-row > .submenu-toggle')
+      .first(),
+  };
 }
 
 async function run() {
@@ -111,6 +130,57 @@ async function run() {
     await assertToggleFocused(page, 'close-button-focus-restore');
     logStep('close-button', 'Close button action keeps focus on trigger');
 
+    // Tab-order regression for collapsed versus expanded submenu branches.
+    await navToggle.click();
+    await waitForExpandedState(page, true);
+
+    const submenuTargets = await getFirstSubmenuFocusTargets(page);
+
+    await submenuTargets.link.focus();
+    await page.keyboard.press('Tab');
+
+    if (!(await isElementFocused(submenuTargets.toggle))) {
+      failStep('collapsed-submenu-tab-order', 'expected tab from submenu link to move to its toggle');
+    }
+
+    await page.keyboard.press('Tab');
+
+    if (await isElementFocused(submenuTargets.firstDescendant)) {
+      failStep(
+        'collapsed-submenu-tab-order',
+        'collapsed submenu child was tabbable before the parent submenu was expanded'
+      );
+    }
+
+    await submenuTargets.toggle.click();
+    await page.waitForFunction(
+      (toggle) =>
+        document.querySelector(toggle)?.getAttribute('aria-expanded') === 'true',
+      'nav#primary-navigation .menu > li.hasChildren .menu-link-row > .submenu-toggle',
+      { timeout: 2500 }
+    );
+
+    await submenuTargets.link.focus();
+    await page.keyboard.press('Tab');
+
+    if (!(await isElementFocused(submenuTargets.toggle))) {
+      failStep('expanded-submenu-tab-order', 'expected tab from submenu link to move to its toggle after expansion');
+    }
+
+    await page.keyboard.press('Tab');
+
+    if (!(await isElementFocused(submenuTargets.firstDescendant))) {
+      failStep(
+        'expanded-submenu-tab-order',
+        'expected expanded submenu to expose its first descendant to keyboard focus'
+      );
+    }
+
+    logStep(
+      'submenu-tab-order',
+      'collapsed submenu descendants are skipped and expanded submenu descendants become tabbable'
+    );
+
     console.log(
       JSON.stringify(
         {
@@ -123,6 +193,8 @@ async function run() {
             'backdrop closes and restores focus',
             'close button closes and restores focus',
             'tab escapes toggle after close',
+            'collapsed submenu descendants are skipped in tab order',
+            'expanded submenu descendants re-enter tab order',
           ],
           passed: true,
         },

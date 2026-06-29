@@ -506,6 +506,10 @@ $nav-drawer-duration: 120ms;
         padding-bottom $nav-motion-duration $nav-motion-ease;
     }
 
+    :global(li ul[aria-hidden='true']) {
+      pointer-events: none;
+    }
+
     :global(li.expanded > ul) {
       max-height: 1000px;
       opacity: 1;
