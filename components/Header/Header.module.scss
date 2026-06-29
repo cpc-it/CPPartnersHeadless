@@ -304,7 +304,7 @@ $nav-drawer-duration: 120ms;
     }
   }
 
-  :global(.menu > li > .menu-link-row > a) {
+  :global(.menu > li > .menu-link-row > .menu-item-trigger) {
     text-transform: uppercase;
   }
 
@@ -321,17 +321,25 @@ $nav-drawer-duration: 120ms;
     }
   }
 
-  :global(a) {
+  :global(.menu-item-trigger) {
     display: inline-flex;
     align-items: center;
     color: var(--color-primary);
     font-weight: $font-weight-bold;
     text-decoration: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
     transition: color $nav-motion-duration $nav-motion-ease,
       opacity $nav-motion-duration $nav-motion-ease;
   }
 
-  :global(.menu > li > .menu-link-row > a) {
+  :global(.menu > li > .menu-link-row > .menu-item-trigger) {
+    margin: 0;
+    font-weight: 600;
     padding: 1.15rem 0;
     letter-spacing: 0.08em;
 
@@ -384,7 +392,7 @@ $nav-drawer-duration: 120ms;
     transform: rotate(180deg);
   }
 
-  :global(li.hasChildren > .menu-link-row > a::after) {
+  :global(li.hasChildren > .menu-link-row > .menu-item-trigger::after) {
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: '\f078';
@@ -425,10 +433,11 @@ $nav-drawer-duration: 120ms;
     }
   }
 
-  :global(li ul a) {
+  :global(li ul .menu-item-trigger) {
     display: block;
     width: 100%;
     padding: 0.85rem 0;
+    font-weight: 600;
 
     @media (min-width: $nav-collapse-breakpoint) {
       padding: 1rem 1.5rem;
@@ -485,7 +494,8 @@ $nav-drawer-duration: 120ms;
     }
   }
 
-  :global(li ul a:hover) {
+  :global(li ul .menu-item-trigger:hover),
+  :global(li ul .menu-item-trigger:focus-visible) {
     @media (min-width: $nav-collapse-breakpoint) {
       background-color: #dbe4dd;
     }
@@ -516,7 +526,7 @@ $nav-drawer-duration: 120ms;
       padding-bottom: 0.9rem;
     }
 
-    :global(li ul .menu-link-row > a) {
+    :global(li ul .menu-link-row > .menu-item-trigger) {
       font-size: 1.7rem;
       font-weight: 600;
       letter-spacing: 0.01em;
@@ -529,10 +539,11 @@ $nav-drawer-duration: 120ms;
       padding-top: 0.75rem;
     }
 
-    :global(.mobile-search-link a) {
+    :global(.mobile-search-link .menu-item-trigger) {
       width: 100%;
       padding: 1rem 0;
       font-size: 1.7rem;
+      font-weight: 600;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }

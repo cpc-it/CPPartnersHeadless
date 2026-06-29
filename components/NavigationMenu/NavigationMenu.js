@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { gql } from '@apollo/client';
 import Link from 'next/link';
 import { FaChevronDown } from 'react-icons/fa';
@@ -19,9 +19,43 @@ const NavigationMenu = forwardRef(function NavigationMenu(
   },
   ref
 ) {
+  const submenuTriggerRefs = useRef({});
+
   if (!menuItems) {
     return null;
   }
+
+  const isDisclosureOnlyItem = (hasChildren, href) =>
+    hasChildren && (!href || /^\/?#$/i.test(href));
+
+  const toggleSubmenu = (itemId, descendantIds = [], triggerElement) => {
+    if (triggerElement) {
+      submenuTriggerRefs.current[itemId] = triggerElement;
+    }
+
+    onToggleItem?.(itemId, descendantIds);
+  };
+
+  const focusLastSubmenuTrigger = (itemId) => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      submenuTriggerRefs.current[itemId]?.focus();
+    });
+  };
+
+  const closeExpandedSubmenuOnEscape = (event, { itemId, isExpanded, descendantIds }) => {
+    if (event.key !== 'Escape' || !isExpanded) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    toggleSubmenu(itemId, descendantIds);
+    focusLastSubmenuTrigger(itemId);
+  };
 
   const getDescendantIds = (item) => {
     const ids = [];
@@ -69,6 +103,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
       const isExternalLink = /^(https?:|mailto:|tel:|\/\/)/i.test(href);
       const descendantIds = hasChildren ? getDescendantIds(item) : [];
+      const isDisclosureOnly = isDisclosureOnlyItem(hasChildren, href);
       const isSubmenuVisible = isBranchVisible && isExpanded;
       const focusProps = isBranchVisible ? {} : { tabIndex: -1 };
 
@@ -77,11 +112,22 @@ const NavigationMenu = forwardRef(function NavigationMenu(
           key={item.id ?? ''}
           className={[
             hasChildren ? 'hasChildren' : '',
+            isDisclosureOnly ? 'disclosure-only' : '',
             isSubmenuVisible ? 'expanded' : '',
             isDesktopHovered ? 'hover-open' : '',
           ]
             .filter(Boolean)
             .join(' ')}
+          onKeyDown={
+            hasChildren
+              ? (event) =>
+                  closeExpandedSubmenuOnEscape(event, {
+                    itemId: item.id,
+                    isExpanded,
+                    descendantIds,
+                  })
+              : undefined
+          }
           onMouseEnter={
             hasChildren && depth === 0
               ? () => onDesktopHoverStart?.(item.id)
@@ -92,12 +138,36 @@ const NavigationMenu = forwardRef(function NavigationMenu(
           }
         >
           <div className="menu-link-row">
-            {isExternalLink || target ? (
-              <a href={href} target={target} rel={rel} onClick={onNavigate} {...focusProps}>
+            {isDisclosureOnly ? (
+              <button
+                type="button"
+                className="menu-item-trigger menu-parent-trigger"
+                aria-expanded={isSubmenuVisible}
+                aria-controls={submenuId}
+                onClick={(event) =>
+                  toggleSubmenu(
+                    item.id,
+                    descendantIds,
+                    event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
+                  )
+                }
+                {...focusProps}
+              >
+                {item.label ?? ''}
+              </button>
+            ) : isExternalLink || target ? (
+              <a
+                href={href}
+                target={target}
+                rel={rel}
+                className="menu-item-trigger"
+                onClick={onNavigate}
+                {...focusProps}
+              >
                 {item.label ?? ''}
               </a>
             ) : (
-              <Link href={href} onClick={onNavigate} {...focusProps}>
+              <Link href={href} className="menu-item-trigger" onClick={onNavigate} {...focusProps}>
                 {item.label ?? ''}
               </Link>
             )}
@@ -108,7 +178,18 @@ const NavigationMenu = forwardRef(function NavigationMenu(
                 aria-expanded={isSubmenuVisible}
                 aria-controls={submenuId}
                 aria-label={`Toggle ${item.label ?? 'submenu'} submenu`}
-                onClick={() => onToggleItem?.(item.id, descendantIds)}
+                ref={(node) => {
+                  if (node) {
+                    submenuTriggerRefs.current[item.id] = node;
+                  }
+                }}
+                onClick={(event) =>
+                  toggleSubmenu(
+                    item.id,
+                    descendantIds,
+                    event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
+                  )
+                }
                 {...focusProps}
               >
                 <FaChevronDown aria-hidden="true" />

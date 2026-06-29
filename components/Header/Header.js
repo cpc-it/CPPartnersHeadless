@@ -344,7 +344,7 @@ export default function Header({ className, menuItems }) {
           >
             {isNavShown ? (
               <li className="mobile-search-link">
-                <Link href="/search" onClick={closeNavigation}>
+                <Link href="/search" className="menu-item-trigger" onClick={closeNavigation}>
                   Search
                 </Link>
               </li>

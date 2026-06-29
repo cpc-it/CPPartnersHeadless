@@ -58,7 +58,9 @@ async function assertTabEscapesToggle(page, step) {
 }
 
 async function focusFirstMenuLink(page, step) {
-  const firstMenuLink = page.locator('nav#primary-navigation a').first();
+  const firstMenuLink = page
+    .locator('nav#primary-navigation .menu-link-row > .menu-item-trigger, nav#primary-navigation a')
+    .first();
   await firstMenuLink.waitFor({ state: 'visible', timeout: 3000 });
   await firstMenuLink.focus();
 
@@ -75,10 +77,12 @@ async function getFirstSubmenuFocusTargets(page) {
 
   return {
     item: submenuItem,
-    link: submenuItem.locator(':scope > .menu-link-row > a'),
+    link: submenuItem.locator(':scope > .menu-link-row > .menu-item-trigger').first(),
     toggle: submenuItem.locator(':scope > .menu-link-row > .submenu-toggle'),
     firstDescendant: submenuItem
-      .locator(':scope > ul > li > .menu-link-row > a, :scope > ul > li > .menu-link-row > .submenu-toggle')
+      .locator(
+        ':scope > ul > li > .menu-link-row > .menu-item-trigger, :scope > ul > li > .menu-link-row > .submenu-toggle'
+      )
       .first(),
   };
 }
@@ -113,7 +117,7 @@ async function assertSubmenuA11yState(page, expectedExpanded, step) {
     const toggle = item.querySelector(':scope > .menu-link-row > .submenu-toggle');
     const submenu = item.querySelector(':scope > ul');
     const firstDescendant = item.querySelector(
-      ':scope > ul > li > .menu-link-row > a, :scope > ul > li > .menu-link-row > .submenu-toggle'
+      ':scope > ul > li > .menu-link-row > .menu-item-trigger, :scope > ul > li > .menu-link-row > .submenu-toggle'
     );
 
     if (!toggle || !submenu) {

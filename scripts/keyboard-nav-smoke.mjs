@@ -131,7 +131,10 @@ async function assertMainNavKeyboardBehavior(page) {
 
   logStep('main-nav-enter-submenu-open', 'Enter expands first submenu and updates ARIA state');
 
-  await page.locator('nav#primary-navigation a').first().focus();
+  await page
+    .locator('nav#primary-navigation .menu-link-row > .menu-item-trigger, nav#primary-navigation a')
+    .first()
+    .focus();
   await page.keyboard.press('Escape');
 
   await waitForDrawerExpanded(page, false);
