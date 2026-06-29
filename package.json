@@ -10,6 +10,8 @@
     "test:nav-smoke:ci": "BASE_URL=${BASE_URL:-http://localhost:3002} node scripts/nav-hover-smoke.mjs",
     "test:nav-focus-smoke": "node scripts/nav-focus-smoke.mjs",
     "test:nav-focus-smoke:ci": "BASE_URL=${BASE_URL:-http://localhost:3002} node scripts/nav-focus-smoke.mjs",
+    "test:desktop-nav-escape-smoke": "node scripts/desktop-nav-escape-smoke.mjs",
+    "test:desktop-nav-escape-smoke:ci": "BASE_URL=${BASE_URL:-http://localhost:3002} node scripts/desktop-nav-escape-smoke.mjs",
     "test:keyboard-nav-smoke": "node scripts/keyboard-nav-smoke.mjs",
     "test:keyboard-nav-smoke:ci": "BASE_URL=${BASE_URL:-http://localhost:3002} node scripts/keyboard-nav-smoke.mjs",
     "test:button-state-smoke": "node scripts/button-state-smoke.mjs",

@@ -1,8 +1,10 @@
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { gql } from '@apollo/client';
 import Link from 'next/link';
 import { FaChevronDown } from 'react-icons/fa';
 import { normalizeInternalLink } from 'utilities';
+
+const NAV_COLLAPSE_BREAKPOINT = 1212;
 
 const NavigationMenu = forwardRef(function NavigationMenu(
   {
@@ -20,18 +22,102 @@ const NavigationMenu = forwardRef(function NavigationMenu(
   ref
 ) {
   const submenuTriggerRefs = useRef({});
+  const [keyboardOpenItems, setKeyboardOpenItems] = useState([]);
+  const [dismissedDesktopItems, setDismissedDesktopItems] = useState([]);
 
   if (!menuItems) {
     return null;
   }
 
+  const isDesktopNavigation = () =>
+    typeof window !== 'undefined' && window.innerWidth >= NAV_COLLAPSE_BREAKPOINT;
+
+  const registerTriggerRef = (itemId, triggerType, node) => {
+    if (!node) {
+      return;
+    }
+
+    const currentRefs = submenuTriggerRefs.current[itemId] ?? {};
+
+    submenuTriggerRefs.current[itemId] = {
+      ...currentRefs,
+      [triggerType]: node,
+    };
+  };
+
+  const setLastTrigger = (itemId, triggerType, triggerElement) => {
+    if (triggerElement) {
+      registerTriggerRef(itemId, triggerType, triggerElement);
+    }
+
+    submenuTriggerRefs.current[itemId] = {
+      ...(submenuTriggerRefs.current[itemId] ?? {}),
+      lastInteracted: triggerType,
+    };
+  };
+
+  const clearKeyboardState = (ids = []) => {
+    if (!ids.length) {
+      return;
+    }
+
+    const idsToClear = new Set(ids);
+
+    setKeyboardOpenItems((current) => current.filter((id) => !idsToClear.has(id)));
+    setDismissedDesktopItems((current) => current.filter((id) => !idsToClear.has(id)));
+  };
+
+  const openKeyboardSubmenu = (itemId) => {
+    if (!isDesktopNavigation()) {
+      return;
+    }
+
+    setKeyboardOpenItems((current) => (current.includes(itemId) ? current : [...current, itemId]));
+    setDismissedDesktopItems((current) => current.filter((id) => id !== itemId));
+  };
+
+  const handleItemFocusCapture = (itemId, event) => {
+    const triggerRefs = submenuTriggerRefs.current[itemId] ?? {};
+    const focusTarget = event.target;
+    const isTriggerFocusTarget =
+      focusTarget === triggerRefs.primary || focusTarget === triggerRefs.toggle;
+
+    if (dismissedDesktopItems.includes(itemId) && isTriggerFocusTarget) {
+      return;
+    }
+
+    openKeyboardSubmenu(itemId);
+  };
+
+  const dismissKeyboardSubmenu = (itemId, descendantIds = []) => {
+    const idsToClear = [itemId, ...descendantIds];
+
+    setKeyboardOpenItems((current) => current.filter((id) => !idsToClear.includes(id)));
+
+    if (!isDesktopNavigation()) {
+      setDismissedDesktopItems((current) => current.filter((id) => !idsToClear.includes(id)));
+      return;
+    }
+
+    setDismissedDesktopItems((current) => {
+      if (current.includes(itemId)) {
+        return current.filter((id) => !descendantIds.includes(id));
+      }
+
+      return [...current.filter((id) => !descendantIds.includes(id)), itemId];
+    });
+  };
+
   const isDisclosureOnlyItem = (hasChildren, href) =>
     hasChildren && (!href || /^\/?#$/i.test(href));
 
-  const toggleSubmenu = (itemId, descendantIds = [], triggerElement) => {
-    if (triggerElement) {
-      submenuTriggerRefs.current[itemId] = triggerElement;
+  const toggleSubmenu = (itemId, descendantIds = [], triggerType, triggerElement) => {
+    if (triggerType) {
+      setLastTrigger(itemId, triggerType, triggerElement);
     }
+
+    clearKeyboardState(descendantIds);
+    setDismissedDesktopItems((current) => current.filter((id) => id !== itemId));
 
     onToggleItem?.(itemId, descendantIds);
   };
@@ -42,18 +128,30 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     }
 
     window.requestAnimationFrame(() => {
-      submenuTriggerRefs.current[itemId]?.focus();
+      const triggerRefs = submenuTriggerRefs.current[itemId] ?? {};
+      const preferredTrigger =
+        triggerRefs[triggerRefs.lastInteracted] ?? triggerRefs.primary ?? triggerRefs.toggle;
+
+      preferredTrigger?.focus();
     });
   };
 
-  const closeExpandedSubmenuOnEscape = (event, { itemId, isExpanded, descendantIds }) => {
-    if (event.key !== 'Escape' || !isExpanded) {
+  const closeExpandedSubmenuOnEscape = (
+    event,
+    { itemId, isExpanded, isKeyboardOpen, descendantIds }
+  ) => {
+    if (event.key !== 'Escape' || (!isExpanded && !isKeyboardOpen)) {
       return;
     }
 
     event.preventDefault();
     event.stopPropagation();
-    toggleSubmenu(itemId, descendantIds);
+
+    if (isExpanded) {
+      toggleSubmenu(itemId, descendantIds);
+    }
+
+    dismissKeyboardSubmenu(itemId, descendantIds);
     focusLastSubmenuTrigger(itemId);
   };
 
@@ -96,6 +194,8 @@ const NavigationMenu = forwardRef(function NavigationMenu(
     return items.map((item) => {
       const hasChildren = item.children?.length > 0;
       const isExpanded = expandedItems.includes(item.id);
+      const isKeyboardOpen = keyboardOpenItems.includes(item.id);
+      const isDismissedDesktopItem = dismissedDesktopItems.includes(item.id);
       const isDesktopHovered = hoveredDesktopItemId === item.id;
       const submenuId = `submenu-${item.id}`;
       const href = normalizeInternalLink(item.path ?? '');
@@ -104,8 +204,16 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       const isExternalLink = /^(https?:|mailto:|tel:|\/\/)/i.test(href);
       const descendantIds = hasChildren ? getDescendantIds(item) : [];
       const isDisclosureOnly = isDisclosureOnlyItem(hasChildren, href);
-      const isSubmenuVisible = isBranchVisible && isExpanded;
+      const isSubmenuVisible =
+        isBranchVisible && (isExpanded || isKeyboardOpen) && !isDismissedDesktopItem;
       const focusProps = isBranchVisible ? {} : { tabIndex: -1 };
+      const submenuTriggerProps = hasChildren
+        ? {
+            'aria-controls': submenuId,
+            'aria-expanded': isSubmenuVisible,
+            'aria-haspopup': 'menu',
+          }
+        : {};
 
       return (
         <li
@@ -114,23 +222,36 @@ const NavigationMenu = forwardRef(function NavigationMenu(
             hasChildren ? 'hasChildren' : '',
             isDisclosureOnly ? 'disclosure-only' : '',
             isSubmenuVisible ? 'expanded' : '',
+            isDismissedDesktopItem ? 'escape-dismissed' : '',
             isDesktopHovered ? 'hover-open' : '',
           ]
             .filter(Boolean)
             .join(' ')}
-          onKeyDown={
+          onFocusCapture={
+            hasChildren ? (event) => handleItemFocusCapture(item.id, event) : undefined
+          }
+          onBlur={
             hasChildren
-              ? (event) =>
-                  closeExpandedSubmenuOnEscape(event, {
-                    itemId: item.id,
-                    isExpanded,
-                    descendantIds,
-                  })
+              ? (event) => {
+                  const nextFocusedElement = event.relatedTarget;
+
+                  if (event.currentTarget.contains(nextFocusedElement)) {
+                    return;
+                  }
+
+                  clearKeyboardState([item.id, ...descendantIds]);
+                }
               : undefined
           }
           onMouseEnter={
-            hasChildren && depth === 0
-              ? () => onDesktopHoverStart?.(item.id)
+            hasChildren
+              ? () => {
+                  setDismissedDesktopItems((current) => current.filter((id) => id !== item.id));
+
+                  if (depth === 0) {
+                    onDesktopHoverStart?.(item.id);
+                  }
+                }
               : undefined
           }
           onMouseLeave={
@@ -142,15 +263,23 @@ const NavigationMenu = forwardRef(function NavigationMenu(
               <button
                 type="button"
                 className="menu-item-trigger menu-parent-trigger"
-                aria-expanded={isSubmenuVisible}
-                aria-controls={submenuId}
+                ref={(node) => registerTriggerRef(item.id, 'primary', node)}
+                onFocus={(event) =>
+                  setLastTrigger(
+                    item.id,
+                    'primary',
+                    event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
+                  )
+                }
                 onClick={(event) =>
                   toggleSubmenu(
                     item.id,
                     descendantIds,
+                    'primary',
                     event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
                   )
                 }
+                {...submenuTriggerProps}
                 {...focusProps}
               >
                 {item.label ?? ''}
@@ -161,13 +290,44 @@ const NavigationMenu = forwardRef(function NavigationMenu(
                 target={target}
                 rel={rel}
                 className="menu-item-trigger"
+                ref={(node) => registerTriggerRef(item.id, 'primary', node)}
                 onClick={onNavigate}
+                onFocus={(event) =>
+                  hasChildren
+                    ? setLastTrigger(
+                        item.id,
+                        'primary',
+                        event.currentTarget instanceof HTMLElement
+                          ? event.currentTarget
+                          : undefined
+                      )
+                    : undefined
+                }
+                {...submenuTriggerProps}
                 {...focusProps}
               >
                 {item.label ?? ''}
               </a>
             ) : (
-              <Link href={href} className="menu-item-trigger" onClick={onNavigate} {...focusProps}>
+              <Link
+                href={href}
+                className="menu-item-trigger"
+                ref={(node) => registerTriggerRef(item.id, 'primary', node)}
+                onClick={onNavigate}
+                onFocus={(event) =>
+                  hasChildren
+                    ? setLastTrigger(
+                        item.id,
+                        'primary',
+                        event.currentTarget instanceof HTMLElement
+                          ? event.currentTarget
+                          : undefined
+                      )
+                    : undefined
+                }
+                {...submenuTriggerProps}
+                {...focusProps}
+              >
                 {item.label ?? ''}
               </Link>
             )}
@@ -175,21 +335,26 @@ const NavigationMenu = forwardRef(function NavigationMenu(
               <button
                 type="button"
                 className="submenu-toggle"
-                aria-expanded={isSubmenuVisible}
-                aria-controls={submenuId}
                 aria-label={`Toggle ${item.label ?? 'submenu'} submenu`}
                 ref={(node) => {
-                  if (node) {
-                    submenuTriggerRefs.current[item.id] = node;
-                  }
+                  registerTriggerRef(item.id, 'toggle', node);
                 }}
+                onFocus={(event) =>
+                  setLastTrigger(
+                    item.id,
+                    'toggle',
+                    event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
+                  )
+                }
                 onClick={(event) =>
                   toggleSubmenu(
                     item.id,
                     descendantIds,
+                    'toggle',
                     event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined
                   )
                 }
+                {...submenuTriggerProps}
                 {...focusProps}
               >
                 <FaChevronDown aria-hidden="true" />
@@ -197,7 +362,19 @@ const NavigationMenu = forwardRef(function NavigationMenu(
             )}
           </div>
           {hasChildren && (
-            <ul id={submenuId} data-depth={depth + 1} aria-hidden={!isSubmenuVisible}>
+            <ul
+              id={submenuId}
+              data-depth={depth + 1}
+              aria-hidden={!isSubmenuVisible}
+              onKeyDown={(event) =>
+                closeExpandedSubmenuOnEscape(event, {
+                  itemId: item.id,
+                  isExpanded,
+                  isKeyboardOpen,
+                  descendantIds,
+                })
+              }
+            >
               {renderMenuItems(item.children, depth + 1, isSubmenuVisible)}
             </ul>
           )}

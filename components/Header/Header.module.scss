@@ -487,6 +487,18 @@ $nav-drawer-duration: 120ms;
     }
   }
 
+  :global(li.escape-dismissed > ul),
+  :global(li.escape-dismissed.hover-open > ul),
+  :global(li.escape-dismissed:hover > ul),
+  :global(li.escape-dismissed:focus-within > ul) {
+    @media (min-width: $nav-collapse-breakpoint) {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      pointer-events: none;
+    }
+  }
+
   :global(li ul li:hover > ul),
   :global(li ul li:focus-within > ul) {
     @media (min-width: $nav-collapse-breakpoint) {
