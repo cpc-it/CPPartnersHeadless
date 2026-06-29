@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import { FaBars, FaSearch, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
@@ -36,15 +36,15 @@ export default function Header({ className, menuItems }) {
     isNavShown ? cx('show') : undefined
   );
 
-  const restoreNavigationTriggerFocus = () => {
+  const restoreNavigationTriggerFocus = useCallback(() => {
     const focusTarget = navOpenTriggerRef.current || navToggleRef.current;
 
     if (focusTarget && typeof focusTarget.focus === 'function') {
       focusTarget.focus();
     }
-  };
+  }, []);
 
-  const closeNavigation = ({ restoreFocus = false } = {}) => {
+  const closeNavigation = useCallback(({ restoreFocus = false } = {}) => {
     if (restoreFocus) {
       restoreNavigationTriggerFocus();
     }
@@ -56,7 +56,7 @@ export default function Header({ className, menuItems }) {
     if (restoreFocus && typeof window !== 'undefined') {
       window.requestAnimationFrame(restoreNavigationTriggerFocus);
     }
-  };
+  }, [restoreNavigationTriggerFocus]);
 
   const toggleNavigation = (event) => {
     event?.preventDefault();
@@ -138,7 +138,7 @@ export default function Header({ className, menuItems }) {
 
   useEffect(() => {
     closeNavigation();
-  }, [router.asPath]);
+  }, [router.asPath, closeNavigation]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -171,7 +171,7 @@ export default function Header({ className, menuItems }) {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isNavShown]);
+  }, [isNavShown, closeNavigation]);
 
   useEffect(() => {
     if (!isNavShown) {
