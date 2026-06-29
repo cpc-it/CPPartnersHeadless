@@ -20,6 +20,8 @@ export default function Header({ className, menuItems }) {
   const [backdropTopOffset, setBackdropTopOffset] = useState(0);
   const headerRef = useRef(null);
   const menuRef = useRef(null);
+  const navToggleRef = useRef(null);
+  const navOpenTriggerRef = useRef(null);
   const router = useRouter();
 
   // Classes with scroll-aware styles
@@ -34,22 +36,52 @@ export default function Header({ className, menuItems }) {
     isNavShown ? cx('show') : undefined
   );
 
-  const closeNavigation = () => {
+  const restoreNavigationTriggerFocus = () => {
+    const focusTarget = navOpenTriggerRef.current || navToggleRef.current;
+
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      focusTarget.focus();
+    }
+  };
+
+  const closeNavigation = ({ restoreFocus = false } = {}) => {
+    if (restoreFocus) {
+      restoreNavigationTriggerFocus();
+    }
+
     setIsNavShown(false);
     setExpandedItems([]);
     setHoveredDesktopItemId(null);
+
+    if (restoreFocus && typeof window !== 'undefined') {
+      window.requestAnimationFrame(restoreNavigationTriggerFocus);
+    }
   };
 
   const toggleNavigation = (event) => {
     event?.preventDefault();
     event?.stopPropagation();
 
+    const triggerButton =
+      typeof HTMLElement !== 'undefined' && event?.currentTarget instanceof HTMLElement
+        ? event.currentTarget
+        : null;
+
     setIsNavShown((current) => {
       const next = !current;
 
+      if (next && triggerButton) {
+        navOpenTriggerRef.current = triggerButton;
+      }
+
       if (!next) {
+        restoreNavigationTriggerFocus();
         setExpandedItems([]);
         setHoveredDesktopItemId(null);
+
+        if (typeof window !== 'undefined') {
+          window.requestAnimationFrame(restoreNavigationTriggerFocus);
+        }
       }
 
       return next;
@@ -129,7 +161,7 @@ export default function Header({ className, menuItems }) {
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        closeNavigation();
+        closeNavigation({ restoreFocus: true });
       }
     };
 
@@ -278,6 +310,7 @@ export default function Header({ className, menuItems }) {
               type="button"
               className={cx('nav-toggle')}
               onClick={toggleNavigation}
+              ref={navToggleRef}
               aria-label={isNavShown ? 'Close navigation' : 'Open navigation'}
               aria-controls="primary-navigation"
               aria-expanded={isNavShown}
@@ -292,7 +325,7 @@ export default function Header({ className, menuItems }) {
               className={cx('nav-backdrop', { show: isNavShown })}
               aria-label="Dismiss navigation overlay"
               tabIndex={0}
-              onClick={closeNavigation}
+              onClick={() => closeNavigation({ restoreFocus: true })}
               style={{ top: `${backdropTopOffset}px` }}
             />
           ) : null}
