@@ -1,5 +1,4 @@
 import className from 'classnames/bind';
-import Image from 'next/image';
 import { FeaturedImage, Heading, PostInfo } from 'components';
 import { useRouter } from 'next/router';
 
