@@ -37,15 +37,6 @@ export default function EntryHeader({ title, image, date, author, className }) {
             </Heading>
           )}
 
-          {isHome && (
-            <Image
-              src="/static/cpp-85-years.png"
-              width={450}
-              height={450}
-              alt="Cal Poly Partners 85 years anniversary mark"
-              className={cx('anniversary')}
-            />
-          )}
 
             <FeaturedImage
               className={cx('featured-image')}
