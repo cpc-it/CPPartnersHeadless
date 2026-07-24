@@ -623,14 +623,18 @@
 
 
 
-.is-type-video.centered {
+.is-type-video.centered,
+.wp-block-embed.aligncenter.is-type-video {
   .wp-block-embed__wrapper {
     width: 75%;
+    margin-left: auto;
+    margin-right: auto;
   }
   iframe {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 16 / 9;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
   }
 }
 
