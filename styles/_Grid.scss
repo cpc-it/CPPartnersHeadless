@@ -713,10 +713,10 @@ h2.intro-text {
 
 .num-wrap {
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  width: 100%;
-  max-width: none;
-  margin: 0;
+  max-width: 80%;
+  margin: 0 auto;
   padding: 7rem 2rem;
 }
 
