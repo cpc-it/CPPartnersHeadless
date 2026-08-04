@@ -1,4 +1,4 @@
-import { getWordPressProps, WordPressTemplate } from '@faustwp/core';
+import { NextResponse } from 'next/server';
 
 const BLOCKED_EXACT_PATHS = new Set([
   '/_session',
@@ -56,34 +56,23 @@ function isProbePath(pathname) {
   return false;
 }
 
-function getRequestedPath(ctx) {
-  const pathSegments = ctx?.params?.wordpressNode;
-  if (Array.isArray(pathSegments) && pathSegments.length > 0) {
-    return `/${pathSegments.join('/')}`;
+export function middleware(request) {
+  const { pathname } = request.nextUrl;
+
+  if (isProbePath(pathname)) {
+    return new NextResponse('Not Found', {
+      status: 404,
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=300',
+      },
+    });
   }
 
-  const resolvedUrl = ctx?.resolvedUrl || '/';
-  return resolvedUrl.split('?')[0] || '/';
+  return NextResponse.next();
 }
 
-export default function Page(props) {
-  return <WordPressTemplate {...props} />;
-}
-
-export function getStaticProps(ctx) {
-  const requestedPath = getRequestedPath(ctx);
-  if (isProbePath(requestedPath)) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return getWordPressProps({ ctx });
-}
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-}
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|api).*)',
+  ],
+};
