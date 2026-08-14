@@ -1,27 +1,23 @@
 /**
- * Returns a title for the current page
- * @param {GeneralSettings} generalSettings The  general settings node.
- * @param {string} titleOverride An optional title to be used instead of the general settings Title.
- * @param {string} descriptionOverride An optional description to be used instead of the general settings Description.
- * @returns {string} The page Title.
+ * Returns a title for the current page.
+ * @param {GeneralSettings} generalSettings The general settings node.
+ * @param {string} titleOverride An optional title to be used instead of the site title.
+ * @param {string} siteTitleOverride An optional site title override.
+ * @returns {string} The page title.
  */
-function pageTitle(
-  generalSettings,
-  titleOverride = null,
-  descriptionOverride = null
-) {
-  const title = titleOverride ? titleOverride : generalSettings?.title;
-  const description = descriptionOverride
-    ? descriptionOverride
-    : generalSettings?.description;
+function pageTitle(generalSettings, titleOverride = null, siteTitleOverride = null) {
+  const siteTitle = siteTitleOverride || generalSettings?.title || 'Cal Poly Partners';
+  const title = titleOverride || siteTitle;
 
-  if (!title && !description) {
+  if (!title) {
     return '';
   }
-  if (title && description) {
-    return `${title} - ${description}`;
+
+  if (title === siteTitle) {
+    return siteTitle;
   }
-  return [title, description].join('').trim();
+
+  return `${title} | ${siteTitle}`;
 }
 
 export default pageTitle;

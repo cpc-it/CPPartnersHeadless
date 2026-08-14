@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import appConfig from '../../app.config';
 import {
   getPublicSiteOrigin,
   normalizeMetadataUrl,
@@ -8,6 +9,8 @@ import {
 
 const DEFAULT_SOCIAL_IMAGE_PATH = '/static/banner.webp';
 const DEFAULT_ORGANIZATION_NAME = 'Cal Poly Partners';
+const DEFAULT_ROBOTS_CONTENT =
+  'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
 
 function compactSchemaValue(value) {
   if (Array.isArray(value)) {
@@ -81,12 +84,19 @@ function buildSchemaGraph({
   const websiteId = `${origin}/#website`;
   const webpageId = `${(effectiveUrl || origin).replace(/\/$/, '')}/#webpage`;
 
+  const organizationSocialLinks = Object.values(appConfig?.socialLinks ?? {}).filter(Boolean);
+
   const baseGraph = [
     {
       '@type': 'Organization',
       '@id': organizationId,
       name: organizationName,
       url: origin,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${origin}${DEFAULT_SOCIAL_IMAGE_PATH}`,
+      },
+      sameAs: organizationSocialLinks.length > 0 ? organizationSocialLinks : undefined,
     },
     {
       '@type': 'WebSite',
@@ -194,14 +204,16 @@ export default function SEO({
     ? undefined
     : `${getPublicSiteOrigin()}${DEFAULT_SOCIAL_IMAGE_PATH}`;
   const effectiveImageUrl = toAbsoluteUrl(imageUrl) || fallbackImageUrl;
+  const pageTitle = title || siteBrandName;
+  const ogType = schemaType === 'WebPage' || schemaType === 'CollectionPage' ? 'website' : 'article';
 
-  // Use the explicit url prop when provided; otherwise derive from current path for indexable pages.
+  // Use the explicit url prop when provided; otherwise derive from the current path for indexable pages.
   const effectiveUrl = normalizeMetadataUrl(url || (!noindex ? router.asPath : undefined));
   const schemaGraph = !noindex
     ? buildSchemaGraph({
         schemaType,
         siteName,
-        title,
+        title: pageTitle,
         description,
         effectiveUrl,
         effectiveImageUrl,
@@ -217,26 +229,24 @@ export default function SEO({
   return (
     <>
       <Head>
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content={siteBrandName} />
+        <meta property="og:locale" content="en_US" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:site" content={siteBrandName} />
 
         {!noindex ? (
-          <meta
-            name="robots"
-            content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
-          />
+          <meta name="robots" content={DEFAULT_ROBOTS_CONTENT} />
         ) : (
           <meta name="robots" content="noindex, nofollow" />
         )}
 
-        {title && (
+        {pageTitle && (
           <>
-            <title>{title}</title>
-            <meta name="title" content={title} />
-            <meta property="og:title" content={title} />
-            <meta property="twitter:title" content={title} />
+            <title>{pageTitle}</title>
+            <meta name="title" content={pageTitle} />
+            <meta property="og:title" content={pageTitle} />
+            <meta property="twitter:title" content={pageTitle} />
           </>
         )}
 
@@ -253,7 +263,9 @@ export default function SEO({
         {effectiveImageUrl && (
           <>
             <meta property="og:image" content={effectiveImageUrl} />
+            <meta property="og:image:alt" content={pageTitle} />
             <meta property="twitter:image" content={effectiveImageUrl} />
+            <meta property="twitter:image:alt" content={pageTitle} />
           </>
         )}
 
