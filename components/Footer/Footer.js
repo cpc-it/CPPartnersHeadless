@@ -30,7 +30,6 @@ export default function Footer({
     facebook: 'Cal Poly Partners on Facebook',
     instagram: 'Cal Poly Partners on Instagram',
     linkedin: 'Cal Poly Partners on LinkedIn',
-    twitter: 'Cal Poly Partners on X',
     calPolyFacebook: 'Cal Poly on Facebook',
     calPolyInstagram: 'Cal Poly on Instagram',
     calPolyTwitter: 'Cal Poly on X',
@@ -101,23 +100,6 @@ export default function Footer({
                         href={appConfig.socialLinks.linkedinUrl}
                       >
                         <FaLinkedinIn
-                          className={cx('social-icon')}
-                          aria-hidden="true"
-                          focusable="false"
-                        />
-                      </a>
-                    </li>
-                  )}
-                  {appConfig.socialLinks?.twitterUrl && (
-                    <li>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cx('social-icon-link')}
-                        aria-label={socialLabels.twitter}
-                        href={appConfig.socialLinks.twitterUrl}
-                      >
-                        <FaXTwitter
                           className={cx('social-icon')}
                           aria-hidden="true"
                           focusable="false"

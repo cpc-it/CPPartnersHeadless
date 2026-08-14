@@ -36,10 +36,9 @@ const appConfig = {
   themeColor: 'green',
 
   /**
-   * @type {[key: 'twitterUrl' | 'facebookUrl' | 'instagramUrl' | 'youtubeUrl' | 'githubUrl' | 'linkedinUrl']: string}
+   * @type {[key: 'facebookUrl' | 'instagramUrl' | 'youtubeUrl' | 'githubUrl' | 'linkedinUrl']: string}
    */
   socialLinks: {
-    twitterUrl: 'https://x.com/CalPolyPartners',
     facebookUrl: 'https://www.facebook.com/calpolypartners/',
     instagramUrl: 'https://www.instagram.com/calpoly_partners/',
     linkedinUrl: 'https://www.linkedin.com/company/calpolypartners',
