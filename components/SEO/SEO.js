@@ -189,6 +189,7 @@ export default function SEO({
   noindex = false,
 }) {
   const router = useRouter();
+  const siteBrandName = siteName || DEFAULT_ORGANIZATION_NAME;
   const fallbackImageUrl = noindex
     ? undefined
     : `${getPublicSiteOrigin()}${DEFAULT_SOCIAL_IMAGE_PATH}`;
@@ -217,9 +218,18 @@ export default function SEO({
     <>
       <Head>
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteBrandName} />
         <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:site" content={siteBrandName} />
 
-        {noindex && <meta name="robots" content="noindex, nofollow" />}
+        {!noindex ? (
+          <meta
+            name="robots"
+            content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+          />
+        ) : (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
 
         {title && (
           <>
