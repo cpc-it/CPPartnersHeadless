@@ -175,11 +175,12 @@ export default function Component(props) {
                     <>By Cal Poly Partners</>
                   )}
 
-                  {/* Date handling — prefer custom field, fallback to WP date */}
-                  {/* Date handling — prefer custom field, fallback to WP date */}
-                  {(postsFields?.datePublished || date) && (
-                    <> • {formatDate(postsFields?.datePublished || date)}</>
-                  )}
+                  {/* Date handling — show the custom field exactly as entered, fallback to WP date */}
+                  {postsFields?.datePublished ? (
+                    <> • {postsFields.datePublished}</>
+                  ) : date ? (
+                    <> • {formatDate(date)}</>
+                  ) : null}
 
                 </p>
 
@@ -231,12 +232,14 @@ export default function Component(props) {
               <h2 className="sidebarHeading">Recent News</h2>
               <ul className="recent-posts">
                 {recentPosts.map((post) => {
+                  const sidebarDate = post.postsFields?.datePublished || post.date;
+
                   return (
                     <li key={post.id}>
                       <div className="post-meta">
-                        {post.date && (
-                          <time dateTime={post.date}>
-                            {formatDate(post.date)}
+                        {sidebarDate && (
+                          <time dateTime={post.postsFields?.datePublished || post.date}>
+                            {post.postsFields?.datePublished || formatDate(post.date)}
                           </time>
                         )}
                         {/* Example if you want to surface ACF data in sidebar too */}
