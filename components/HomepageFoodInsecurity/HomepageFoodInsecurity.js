@@ -8,7 +8,7 @@ export default function HomepageFoodInsecurity() {
           <div className="wp-block-media-text has-media-on-the-right is-stacked-on-mobile yellow-image-right">
             <div className="wp-block-media-text__content">
               <h2 className="wp-block-heading">Alleviating Food Insecurity</h2>
-              <p>We partner closely with the university's basic needs program to help alleviate food insecurity on campus. In the 2025-26 academic year, we provided funding for 50,000 meals to students in need. This donation is in addition to our annual contribution to Cal Poly Athletics, ensuring that student-athletes have access to free or reduced meals.</p>
+              <p>We partner closely with the university&apos;s basic needs program to help alleviate food insecurity on campus. In the 2025-26 academic year, we provided funding for 50,000 meals to students in need. This donation is in addition to our annual contribution to Cal Poly Athletics, ensuring that student-athletes have access to free or reduced meals.</p>
               <p>
                 <a
                   href="https://donate.stripe.com/5kAbLtgBw6WH6Ag7st"
