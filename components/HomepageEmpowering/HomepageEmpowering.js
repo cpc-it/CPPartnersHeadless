@@ -19,7 +19,7 @@ export default function HomepageEmpowering() {
             </figure>
             <div className="wp-block-media-text__content">
               <h2 className="wp-block-heading">Empowering Through Employment</h2>
-              <p>Beyond our core services, we are also one of the largest employers in San Luis Obispo County. In the 2022-23 academic year, we employed over 3,100 students. As a Cal Poly Partners employee, students not only earn a paycheck but also gain invaluable life and career skills, positioning them for success beyond graduation.</p>
+              <p>Beyond our core services, we are also one of the largest employers in San Luis Obispo County. In the 2025-26 academic year, we employed over 1,800 students. As a Cal Poly Partners employee, students not only earn a paycheck but also gain invaluable life and career skills, positioning them for success beyond graduation.</p>
               <p>
                 <Link legacyBehavior href="/careers/">
                   <a title="Work With Us">
