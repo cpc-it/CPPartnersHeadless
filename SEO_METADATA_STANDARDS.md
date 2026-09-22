@@ -61,7 +61,7 @@ Source of truth: [components/SEO/SEO.js](components/SEO/SEO.js) and [utilities/n
 - Effective URL is normalized through `normalizeMetadataUrl()`:
   - rewrites known backend hosts to `NEXT_PUBLIC_SITE_URL` origin
   - strips query and hash by default
-  - enforces trailing slash on page-like paths
+  - removes trailing slash on page-like paths to match the deployed Next.js URL policy
 - If page is `noindex` and `url` is omitted, no canonical/`og:url`/`twitter:url` is emitted.
 
 ### Image

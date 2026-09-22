@@ -32,7 +32,7 @@ function toCanonicalAbsoluteUrl(value) {
   return normalizeMetadataUrl(value, {
     includeQuery: false,
     includeHash: false,
-    trailingSlash: true,
+    trailingSlash: false,
     allowExternal: false,
   });
 }

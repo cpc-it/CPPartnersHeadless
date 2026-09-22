@@ -99,7 +99,7 @@ export function normalizeMetadataUrl(
   {
     includeQuery = false,
     includeHash = false,
-    trailingSlash = true,
+    trailingSlash = false,
     allowExternal = true,
   } = {}
 ) {
