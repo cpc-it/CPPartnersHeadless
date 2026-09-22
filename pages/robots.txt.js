@@ -24,6 +24,10 @@ function shouldAllowIndexing(origin) {
     return true;
   }
 
+  if (isProductionOrigin(origin)) {
+    return true;
+  }
+
   if (process.env.VERCEL_ENV) {
     return process.env.VERCEL_ENV === 'production';
   }
